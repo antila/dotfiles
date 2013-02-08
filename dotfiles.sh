@@ -18,16 +18,19 @@ function initall {
         echo -e "\n"
         # Force remove the vim directory if it's already there.
         if [ -e "${HOME}/.vim" ]; then
-            echo -e "Removing .vim-folder\n"
+            echo -e " * Removing ~/.vim\n"
             rm -rf "${HOME}/.vim"
         fi
 
-        symlink bash/bashrc .bashrc
+        # Create symlinks
+        symlink config/bash/bashrc .bashrc
+        symlink config/zsh/zshrc .zshrc
+        symlink lib/bash/oh-my-zsh/ .oh-my-zsh
     fi
 }
 
 function symlink {
-    echo -e " * Creating symbolic link from ${DOTFILES_DIRECTORY}/$1 to ${HOME}/$2\n"
+    echo -e " * Creating symbolic link from ${DOTFILES_DIRECTORY}/$1 to ${HOME}/$2"
     ln --force --symbolic ${DOTFILES_DIRECTORY}/$1 ${HOME}/$2
 }
 
@@ -57,6 +60,17 @@ function update-submodule {
     git add $1
     git commit -m "Update submodule '$1' to the latest version"
     git push origin master
+}
+
+function add-submodule {
+    # Add the new submodule
+    #git submodule add https://example.com/remote/path/to/repo.git vim/bundle/one-submodule
+    # Initialize and clone the submodule
+    #git submodule update --init
+    # Stage the changes
+    #git add vim/bundle/one-submodule
+    # Commit the changes
+    #git commit -m "Add a new submodule: one-submodule"
 }
 
 ################################################################################

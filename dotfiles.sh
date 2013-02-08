@@ -41,15 +41,7 @@ fi
 
 ## Submodules ##################################################################
 
-submodules=( 'lib/bash/z' )
-
-if [[ "$1" == "submodules" ]]; then
-    for i in "${submodules[@]}"
-    do
-       update-submodule $i
-    done
-    exit
-fi
+submodules=( 'lib/bash/z' 'lib/bash/oh-my-zsh' )
 
 function update-submodule {
     echo
@@ -58,11 +50,19 @@ function update-submodule {
     git pull origin master
     cd ${DOTFILES_DIRECTORY}
     git add $1
-    git commit -m "Update submodule '$1' to the latest version"
+    git commit $1 -m "Update submodule '$1' to the latest version"
     git push origin master
 }
 
-function add-submodule {
+if [[ "$1" == "update-submodules" ]]; then
+    for i in "${submodules[@]}"
+    do
+       update-submodule $i
+    done
+    exit
+fi
+
+#function add-submodule {
     # Add the new submodule
     #git submodule add https://example.com/remote/path/to/repo.git vim/bundle/one-submodule
     # Initialize and clone the submodule
@@ -71,6 +71,6 @@ function add-submodule {
     #git add vim/bundle/one-submodule
     # Commit the changes
     #git commit -m "Add a new submodule: one-submodule"
-}
+#}
 
 ################################################################################

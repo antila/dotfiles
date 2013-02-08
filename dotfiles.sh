@@ -12,25 +12,29 @@ fi
 ## Init ########################################################################
 
 function initall {
-    read -p "Are you sure? This will delete all your configurations. (y/n):" -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        echo -e "\n"
-        # Force remove the vim directory if it's already there.
-        if [ -e "${HOME}/.vim" ]; then
-            echo -e " * Removing ~/.vim\n"
-            rm -rf "${HOME}/.vim"
-        fi
 
-        # Create symlinks
-        symlink config/bash/bashrc .bashrc
-        symlink config/zsh/zshrc .zshrc
-        symlink lib/bash/oh-my-zsh/ .oh-my-zsh
+    echo -e " * Updating submodules"
+    # Force remove the vim directory if it's already there.
+    if [ -e "${HOME}/.vim" ]; then
+        echo -e " * Removing ~/.vim\n"
+        rm -rf "${HOME}/.vim"
     fi
+
+    # Submodules
+    git submodule init
+    git submodule update
+
+    # Create symlinks
+    symlink config/bash/bashrc .bashrc
+    symlink config/zsh/zshrc .zshrc
+    symlink lib/bash/oh-my-zsh .oh-my-zsh
+
+    echo -e "\nDone!\n"
 }
 
 function symlink {
     echo -e " * Creating symbolic link from ${DOTFILES_DIRECTORY}/$1 to ${HOME}/$2"
+    rm -f ${HOME}/$2
     ln --force --symbolic ${DOTFILES_DIRECTORY}/$1 ${HOME}/$2
 }
 

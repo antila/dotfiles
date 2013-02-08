@@ -1,0 +1,15 @@
+# Bash customisation file
+
+if [[ -n $PS1 ]]; then
+    : # These are executed only for interactive shells
+    echo "Starting zsh."
+    exec zsh
+else
+    : # Only for NON-interactive shells
+fi
+
+if shopt -q login_shell ; then
+    : # These are executed only when it is a login shell
+else
+    : # Only when it is NOT a login shell
+fi

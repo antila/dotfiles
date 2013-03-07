@@ -28,6 +28,7 @@ function initall {
     symlink config/bash/bashrc .bashrc
     symlink config/zsh/zshrc .zshrc
     symlink lib/bash/oh-my-zsh .oh-my-zsh
+	symlink config/vim .vim
 
     echo -e "\nDone!\n"
 }

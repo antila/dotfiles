@@ -32,12 +32,15 @@ ZSH_THEME="robbyrussell"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git)
+plugins=(git autojump last-working-dir npm symfony2)
 
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+#export PATH=/usr/local/lib/node_modules/:/usr/local/lib/:/usr/lib/node_modules/:$PATH
 
-~/dotfiles/lib/bash/z/z.sh
-$_Z_DATA=~/dotfiles/config/zsh/z
+# Node.js NPM completion
+#source ~/local/node/lib/node_modules/npm/lib/utils/completion.sh
+export NODE_PATH=/usr/lib/node_modules
+
+export TERM=xterm-256color 

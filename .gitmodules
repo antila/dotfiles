@@ -1,6 +1,3 @@
-[submodule "lib/bash/z"]
-	path = lib/bash/z
-	url = https://github.com/rupa/z.git
 [submodule "lib/bash/oh-my-zsh"]
 	path = lib/bash/oh-my-zsh
 	url = https://github.com/robbyrussell/oh-my-zsh

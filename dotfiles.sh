@@ -26,6 +26,7 @@ function initall {
 
     # Create symlinks
     symlink config/bash/bashrc .bashrc
+    symlink config/screen/screenrc .screenrc
     symlink config/zsh/zshrc .zshrc
     symlink lib/bash/oh-my-zsh .oh-my-zsh
 	symlink config/vim .vim

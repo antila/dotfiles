@@ -30,6 +30,7 @@ function initall {
     symlink config/zsh/zshrc .zshrc
     symlink lib/bash/oh-my-zsh .oh-my-zsh
 	symlink config/vim .vim
+	symlink config/ack/ackrc .ackrc
 
     echo -e "\nDone!\n"
 }

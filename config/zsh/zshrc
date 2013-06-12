@@ -44,3 +44,6 @@ source $ZSH/oh-my-zsh.sh
 export NODE_PATH=/usr/lib/node_modules
 
 export TERM=xterm-256color
+
+# Shortcut for ack-grep
+alias ag=ack-grep

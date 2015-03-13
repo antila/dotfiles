@@ -1,7 +1,0 @@
---ignore-dir=lib
---ignore-dir=cache
---ignore-dir=node_modules
---type-set
-twig=.twig
---type-set
-less=.less

@@ -15,8 +15,8 @@
 ! ░░░░░░░░░░
 !
 ! █▓▒░ fonts
-urxvt*font: xft:gohufont:size=11:antialias=true
-urxvt*boldFont: xft:gohufont:size=11:antialias=true
+urxvt*font: xft:ProggyCleanTT:size=12:antialias=false
+urxvt*boldFont: xft:ProggyCleanTT:size=12:antialias=false
 urxvt*lineSpace: -1
 
 ! █▓▒░ interface

@@ -4,8 +4,12 @@
 	],
 	"installed_packages":
 	[
+		"Color Highlighter",
+		"Icon Fonts",
+		"LESS",
 		"Monokai Extended",
 		"Package Control",
+		"PHP-Twig",
 		"Theme - Soda"
 	]
 }

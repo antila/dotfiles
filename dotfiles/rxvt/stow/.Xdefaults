@@ -24,27 +24,6 @@ urxvt*scrollBar: false
 urxvt*transparent: false
 !urxvt*shading: 38
 
-! █▓▒░ mikado colors
-urxvt*foreground: #f3f3f3
-urxvt*background: #222222
-urxvt*cursorColor: #f3f3f3
-urxvt*color1: #a04363
-urxvt*color9: #ae837a
-urxvt*color2: #9b9329
-urxvt*color10: #b4aa30
-urxvt*color3: #bf7a29
-urxvt*color11: #c7a551
-urxvt*color4: #6a8c8c
-urxvt*color12: #74999e
-urxvt*color5: #856774
-urxvt*color13: #9c818e
-urxvt*color6: #757978
-urxvt*color14: #9fa590
-urxvt*color7: #bcbcaf
-urxvt*color15: #c1c4bc
-urxvt*color0: #222222
-urxvt*color8: #666666
-
 ! █▓▒░ clipboard
 urxvt.perl-ext-common: default,clipboard,keyboard-select,selection-to-clipboard
 URxvt.keysym.Shift-Control-C: perl:clipboard:copy
@@ -56,7 +35,73 @@ URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 urxvt.clipboard.copycmd:  xsel -ib
 urxvt.clipboard.pastecmd: xsel -ob
 
+URxvt*depth: 32
+URxvt*dynamicColors: on
+URxvt*cursorBlink: true
+
 ! █▓▒░ misc
 urxvt.saveLines: 4095
 urxvt.iso14755: false
 !URxvt*altSendsEscape: true
+
+!! source: https://github.com/spazzpp2/dotfiles/blob/29819a5ac5e451bfa39bc324378aa508ef75cae8/Molokai.xrdb
+
+!       color0       (black)            = Black
+!       color1       (red)              = Red3
+!       color2       (green)            = Green3
+!       color3       (yellow)           = Yellow3
+!       color4       (blue)             = Blue3
+!       color5       (magenta)          = Magenta3
+!       color6       (cyan)             = Cyan3
+!       color7       (white)            = AntiqueWhite
+!       color8       (bright black)     = Grey25
+!       color9       (bright red)       = Red
+!       color10      (bright green)     = Green
+!       color11      (bright yellow)    = Yellow
+!       color12      (bright blue)      = Blue
+!       color13      (bright magenta)   = Magenta
+!       color14      (bright cyan)      = Cyan
+!       color15      (bright white)     = White
+!       foreground                      = Black
+!       background                      = White
+
+! Molokai theme
+
+URxvt*background: #101010
+URxvt*foreground: #d0d0d0
+URxvt*color0: #101010
+URxvt*color1: #960050
+URxvt*color2: #66aa11
+URxvt*color3: #c47f2c
+URxvt*color4: #30309b
+URxvt*color5: #7e40a5
+URxvt*color6: #3579a8
+URxvt*color7: #9999aa
+URxvt*color8: #303030
+URxvt*color9: #ff0090
+URxvt*color10: #80ff00
+URxvt*color11: #ffba68
+URxvt*color12: #5f5fee
+URxvt*color13: #bb88dd
+URxvt*color14: #4eb4fa
+URxvt*color15: #d0d0d0
+
+*xterm*background: #101010
+*xterm*foreground: #d0d0d0
+*xterm*cursorColor: #d0d0d0
+*xterm*color0: #101010
+*xterm*color1: #960050
+*xterm*color2: #66aa11
+*xterm*color3: #c47f2c
+*xterm*color4: #30309b
+*xterm*color5: #7e40a5
+*xterm*color6: #3579a8
+*xterm*color7: #9999aa
+*xterm*color8: #303030
+*xterm*color9: #ff0090
+*xterm*color10: #80ff00
+*xterm*color11: #ffba68
+*xterm*color12: #5f5fee
+*xterm*color13: #bb88dd
+*xterm*color14: #4eb4fa
+*xterm*color15: #d0d0d0

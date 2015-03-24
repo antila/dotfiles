@@ -6,7 +6,7 @@ local menubar = require("menubar")
 
 -- This is used later as the default terminal and editor to run.
 editor = os.getenv("EDITOR") or "subl"
-terminal = "urxvt -fg white -bg black"
+terminal = 'urxvt'
 editor_cmd = terminal .. " -e " .. editor
 
 -- {{{ Menu

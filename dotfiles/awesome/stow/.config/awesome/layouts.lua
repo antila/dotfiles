@@ -16,13 +16,13 @@ batt = wibox.widget.textbox()
 vicious.register(batt, vicious.widgets.bat, "Batt: $2% Rem: $3", 61, "BAT1")
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-local layouts =
+layouts =
 {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
-    -- awful.layout.suit.tile.left,
-    -- awful.layout.suit.tile.bottom,
-    -- awful.layout.suit.tile.top,
+    awful.layout.suit.tile.left,
+    awful.layout.suit.tile.bottom,
+    awful.layout.suit.tile.top,
     -- awful.layout.suit.fair,
     -- awful.layout.suit.fair.horizontal,
     -- awful.layout.suit.spiral,
@@ -37,15 +37,15 @@ local layouts =
 -- Define a tag table which hold all screen tags.
 tags = {
  names  = {
-         '☭:IRC',
-         '⚡:Luakit',
-         '♨:Chrome',
-         '☠:Vim',
-         '☃:Vbox',
-         '⌥:Multimedia',
-         '⌘:Conky',
-         '✇:IDE',
-         '✣:Facepalm',
+         '☭:Web',
+         '⚡:Code',
+         '♨:Terminal',
+         '☠:Files',
+         '☃:Social',
+         '⌥:6',
+         '⌘:7',
+         '✇:8',
+         '✣:9',
            },
  layout = {
       layouts[3], -- 1:irc

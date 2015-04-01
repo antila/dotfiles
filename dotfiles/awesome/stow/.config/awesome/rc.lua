@@ -5,6 +5,7 @@ home_path  = os.getenv('HOME') .. '/'
 local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
+local tyrannical = require("tyrannical")
 require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
@@ -22,10 +23,10 @@ freedesktop.utils.icon_theme = 'gnome'
 --Vicious + Widgets
 vicious = require("vicious")
 
+local tags = require("tags")
 local layouts = require("layouts")
 local keys = require("keys")
 local menu = require("menu")
-local rules = require("rules")
 local signals = require("signals")
 local wallpaper = require("wallpaper")
 local wi = require("wi")

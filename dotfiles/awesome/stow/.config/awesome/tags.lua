@@ -104,8 +104,8 @@ tyrannical.properties.centered = {
 tyrannical.settings.block_children_focus_stealing = true --Block popups ()
 tyrannical.settings.group_children = true --Force popups/dialogs to have the same tags as the parent client
 
+-- Create class for profanity running in terminal
 awful.rules.rules = {
-    --default stuff here,
     {
         rule = { class = "URxvt", name = "profanity"  },
         callback = function(c)

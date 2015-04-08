@@ -10,25 +10,27 @@ tyrannical.tags = {
       --screen      = screen.count()>1 and 2 or 1,-- Setup on screen 2 if there is more than 1 screen, else on screen 1
         screen      = 1,
         layout      = awful.layout.suit.max,      -- Use the max layout
+        exec_once   = {"iceweasel"},
         class = {
             "Opera", "Firefox", "Rekonq", "Dillo", "Arora", "Chromium",
             "nightly", "minefield", "Iceweasel"
         }
     },
     {
-        name = "Develop",
+        name        = "Develop",
         init        = true,
         exclusive   = true,
         screen      = 1,
-        layout      = awful.layout.suit.max                          ,
+        layout      = awful.layout.suit.max,
+        exec_once   = {"subl"},
         class ={
             "Sublime_text", "Kate", "KDevelop", "Codeblocks", "Code::Blocks" , "DDD", "kate4"}
     },
     {
-        name        = "Terminal",                 -- Call the tag "Term"
+        name        = "Terminal",             -- Call the tag "Term"
         init        = true,                   -- Load the tag on startup
         exclusive   = true,                   -- Refuse any other type of clients (by classes)
-        screen      = {1,2},                  -- Create this tag on screen 1 and screen 2
+        screen      = 1,                      -- Create this tag on screen 1 and screen 2
         layout      = awful.layout.suit.tile, -- Use the tile layout
         instance    = {"dev", "ops"},         -- Accept the following instances. This takes precedence over 'class'
         class       = { --Accept the following classes, refuse everything else (because of "exclusive=true")
@@ -57,6 +59,21 @@ tyrannical.tags = {
             "Assistant"     , "Okular"         , "Evince"    , "EPDFviewer"   , "xpdf",
             "Xpdf"          ,                                        }
     },
+    {
+        name        = "Social",
+        screen      = screen.count()>1 and 2 or 1, -- Setup on screen 2 if there is more than 1 screen, else on screen 1
+        init        = true,
+        exclusive   = true,
+        layout      = awful.layout.suit.tile,
+        exec_once   = {
+            "profanity --account chas",
+            "profanity --account anders.antila@chas.se",
+            "icedove"
+        },
+        class       = {
+            "Icedove", "profanity",
+        }
+    }
 }
 
 -- Ignore the tag "exclusive" property for the following clients (matched by classes)
@@ -87,3 +104,12 @@ tyrannical.properties.centered = {
 tyrannical.settings.block_children_focus_stealing = true --Block popups ()
 tyrannical.settings.group_children = true --Force popups/dialogs to have the same tags as the parent client
 
+awful.rules.rules = {
+    --default stuff here,
+    {
+        rule = { class = "URxvt", name = "profanity"  },
+        callback = function(c)
+        awful.client.property.set(c, "overwrite_class", "profanity")
+        end
+    }
+}

@@ -76,3 +76,18 @@ naughty.config.defaults.hover_timeout = nil
 awesome.font = "GohuFont 10"
 theme.font = 'GohuFont 10'
 vicious.font = 'GohuFont 10'
+
+-- this is my default font
+-- theme.font      = "Inconsolata Medium 10"
+-- make tag list bigger
+-- theme.taglist_font = "Inconsolata Medium 14"
+
+awful.util.spawn("nm-applet")
+
+-- TODO:
+-- https://awesome.naquadah.org/wiki/Conky_HUD
+-- https://awesome.naquadah.org/wiki/Using_dmenu
+-- http://weechat.org/
+-- https://awesome.naquadah.org/wiki/Urxvt_tips
+-- prevent minimize
+-- click to focus instead of sloppy focus

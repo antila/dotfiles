@@ -6,10 +6,16 @@
 	[
 		"Color Highlighter",
 		"Icon Fonts",
+		"jQuery",
+		"JSHint",
+		"JSHint Gutter",
 		"LESS",
 		"Monokai Extended",
 		"Package Control",
 		"PHP-Twig",
+		"Phpcs",
+		"SublimeLinter",
+		"SublimeLinter-jshint",
 		"Theme - Soda"
 	]
 }

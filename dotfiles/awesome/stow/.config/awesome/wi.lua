@@ -47,7 +47,7 @@ vicious.register(batpct, vicious.widgets.bat, function(widget, args)
   end
 
   return args[2] .. "%"
-end, nil, "BAT1")
+end, nil, "BAT0")
 
 -- Buttons
 function popup_bat()
@@ -148,7 +148,7 @@ mem = wibox.widget.textbox()
 vicious.register(mem, vicious.widgets.mem, "Mem: $1% Use: $2MB Total: $3MB Free: $4MB Swap: $5%", 2)
 -- End Mem }}}
 --
--- {{{ Start Gmail 
+-- {{{ Start Gmail
 mailicon = wibox.widget.imagebox(beautiful.widget_mail)
 mailwidget = wibox.widget.textbox()
 gmail_t = awful.tooltip({ objects = { mailwidget },})
@@ -157,7 +157,7 @@ vicious.register(mailwidget, vicious.widgets.gmail,
         gmail_t:set_text(args["{subject}"])
         gmail_t:add_to_object(mailicon)
             return args["{count}"]
-                 end, 120) 
+                 end, 120)
 
      mailicon:buttons(awful.util.table.join(
          awful.button({ }, 1, function () awful.util.spawn("urxvt -e mutt", false) end)

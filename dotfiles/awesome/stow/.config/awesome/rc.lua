@@ -82,7 +82,17 @@ vicious.font = 'GohuFont 10'
 -- make tag list bigger
 -- theme.taglist_font = "Inconsolata Medium 14"
 
-awful.util.spawn("nm-applet")
+function run_once(cmd)
+    findme = cmd
+    firstspace = cmd:find(" ")
+    if firstspace then
+        findme = cmd:sub(0, firstspace-1)
+    end
+    awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
+end
+
+run_once("xscreensaver -no-splash")
+run_once("nm-applet") -- wifi
 
 -- TODO:
 -- https://awesome.naquadah.org/wiki/Conky_HUD

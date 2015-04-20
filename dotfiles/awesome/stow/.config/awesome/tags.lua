@@ -43,7 +43,7 @@ tyrannical.tags = {
         exclusive   = true,
         screen      = 1,
         layout      = awful.layout.suit.tile,
-        exec_once   = {"dolphin"}, --When the tag is accessed for the first time, execute this command
+        exec_once   = {"nautilus"}, --When the tag is accessed for the first time, execute this command
         class  = {
             "Thunar", "Konqueror", "Dolphin", "ark", "Nautilus","emelfm"
         }

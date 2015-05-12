@@ -35,6 +35,20 @@ globalkeys = awful.util.table.join(
         end
     ),
 
+    -- ThinkPad USB Keyboard Special Keys
+    awful.key({ }, "XF86AudioMute",           awful.util.spawn_with_shell("amixer -q set Master toggle") end),
+    awful.key({ }, "XF86AudioLowerVolume",    function () awful.util.spawn("amixer set Master 2%-") end),
+    awful.key({ }, "XF86AudioRaiseVolume",    function () awful.util.spawn("amixer set Master 2%+") end),
+    -- Mic mute
+    awful.key({ }, "XF86MonBrightnessDown",   function () awful.util.spawn("xbacklight -dec 10") end),
+    awful.key({ }, "XF86MonBrightnessUp",     function () awful.util.spawn("xbacklight -inc 10") end),
+    -- Projector
+    -- Wifi
+    -- Cogwheel
+    -- Search
+    -- [][][]
+    -- [][][][][][]
+
     awful.key({ modkey,           }, "j",
         function ()
             awful.client.focus.byidx( 1)

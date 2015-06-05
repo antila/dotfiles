@@ -36,7 +36,7 @@ globalkeys = awful.util.table.join(
     ),
 
     -- ThinkPad USB Keyboard Special Keys
-    awful.key({ }, "XF86AudioMute",           awful.util.spawn_with_shell("amixer -q set Master toggle") end),
+    awful.key({ }, "XF86AudioMute",           function () awful.util.spawn_with_shell("amixer -q set Master toggle") end),
     awful.key({ }, "XF86AudioLowerVolume",    function () awful.util.spawn("amixer set Master 2%-") end),
     awful.key({ }, "XF86AudioRaiseVolume",    function () awful.util.spawn("amixer set Master 2%+") end),
     -- Mic mute

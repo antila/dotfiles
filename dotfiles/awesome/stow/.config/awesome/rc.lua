@@ -23,6 +23,7 @@ freedesktop.utils.icon_theme = 'gnome'
 --Vicious + Widgets
 vicious = require("vicious")
 
+local autostart = require("autostart")
 local tags = require("tags")
 local layouts = require("layouts")
 local keys = require("keys")
@@ -93,6 +94,19 @@ end
 
 run_once("xscreensaver -no-splash")
 run_once("nm-applet") -- wifi
+
+-- Local local config file
+local hostname = awful.util.pread('hostname -s'):gsub('\n', '')
+local host_config_file = awful.util.getdir('config') .. '/rc.' .. hostname .. '.lua'
+if awful.util.file_readable(host_config_file) then
+    local host_config_function, host_config_load_error
+    host_config_function, host_config_load_error = loadfile(host_config_file)
+    if not host_config_load_error then
+        host_config_function()
+    else
+        print(string.format('[awesome] Failed to load %s: %s', host_config_file, host_config_load_error))
+    end
+end
 
 -- TODO:
 -- https://awesome.naquadah.org/wiki/Conky_HUD

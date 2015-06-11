@@ -1,0 +1,26 @@
+"*":
+  "exception-reporting":
+    userId: "739effc9-fe2c-8546-ae01-2f18fc2f4326"
+  welcome:
+    showOnStartup: false
+  core:
+    themes: [
+      "seti-ui"
+      "monokai-soda"
+    ]
+  editor:
+    invisibles:
+      {}
+    fontFamily: "DejaVu Mono"
+    showIndentGuide: true
+    tabLength: 4
+    showInvisibles: true
+  "isotope-ui":
+    {}
+  linter:
+    {}
+  fonts:
+    fontFamily: "DejaVu Mono"
+    preview: "rrtrtgrtgrtgrtgrtgtrgrt"
+  "markdown-preview":
+    {}

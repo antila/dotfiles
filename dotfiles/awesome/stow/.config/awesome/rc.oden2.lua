@@ -5,14 +5,16 @@ awful.tag.delete()
 
 tyrannical.tags = {
     {
-        name        = "Develop",
-        screen      = 1,
+        name        = "Web",
+        screen      = 2, -- Setup on screen 2 if there is more than 1 screen, else on screen 1
         init        = true,
         exclusive   = true,
         layout      = awful.layout.suit.tile,
         exec_once   = {
+            "iceweasel"
         },
         class       = {
+            "Iceweasel"
         }
     },
     {
@@ -22,11 +24,9 @@ tyrannical.tags = {
         exclusive   = true,
         layout      = awful.layout.suit.tile,
         exec_once   = {
-            "iceweasel",
             "atom"
         },
         class       = {
-            "Iceweasel",
             "Atom"
         }
     },

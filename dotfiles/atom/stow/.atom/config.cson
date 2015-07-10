@@ -6,7 +6,7 @@
   core:
     themes: [
       "seti-ui"
-      "monokai-soda"
+      "atom-dark-syntax"
     ]
   editor:
     invisibles:
@@ -15,6 +15,7 @@
     showIndentGuide: true
     tabLength: 4
     showInvisibles: true
+    fontSize: 14
   "isotope-ui":
     {}
   linter:
@@ -23,4 +24,6 @@
     fontFamily: "DejaVu Mono"
     preview: "rrtrtgrtgrtgrtgrtgtrgrt"
   "markdown-preview":
+    {}
+  "merge-conflicts":
     {}

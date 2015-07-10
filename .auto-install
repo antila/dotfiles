@@ -3,3 +3,22 @@ figlet
 
 # pidgin - graphical multi-protocol instant messaging client for X
 pidgin
+
+# Flash :(
+flashplugin-nonfree
+
+vim
+git-gui
+ack-grep
+
+# Screensavers!
+xscreensaver
+xscreensaver-data
+xscreensaver-data-extra
+xscreensaver-gl
+xscreensaver-gl-extra
+xscreensaver-screensaver-bsod
+xscreensaver-screensaver-webcollage
+
+# Yubikey
+gnupg2

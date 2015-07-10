@@ -48,13 +48,14 @@ run_installers () {
 install_aptitude_stuff () {
   # find the installers and run them iteratively
   info 'Installing apt stuff:'
-  #sudo apt-get install $(grep -vE "^\s*#" .auto-install  | tr "\n" " ")
+  info -- $(grep -vE "^\s*#" .auto-install  | tr "\n" " ")
+  sudo apt-get install -y $(grep -vE "^\s*#" .auto-install  | tr "\n" " ")
 }
 
 if [ "$EUID" -ne 0 ]; then
     run_installers
     install_dotfiles
-    #install_aptitude_stuff
+    install_aptitude_stuff
     echo ''
     success '  All installed!'
     exit
@@ -62,4 +63,3 @@ else
     fail "Don't run this as root."
     exit
 fi
-

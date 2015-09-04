@@ -27,3 +27,7 @@
     {}
   "merge-conflicts":
     {}
+  tabs:
+    usePreviewTabs: true
+  "autocomplete-plus":
+    {}

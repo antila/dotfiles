@@ -1,33 +1,25 @@
 "*":
-  "exception-reporting":
-    userId: "739effc9-fe2c-8546-ae01-2f18fc2f4326"
-  welcome:
-    showOnStartup: false
-  core:
-    themes: [
-      "seti-ui"
-      "atom-dark-syntax"
-    ]
+  core: {}
+  docblockr: {}
   editor:
-    invisibles:
-      {}
-    fontFamily: "DejaVu Mono"
+    fontSize: 17
+    invisibles: {}
     showIndentGuide: true
-    tabLength: 4
     showInvisibles: true
-    fontSize: 14
-  "isotope-ui":
-    {}
-  linter:
-    {}
+    tabLength: 4
+    tabType: "soft"
+  "exception-reporting":
+    userId: "2d534536-8dac-faf2-26f5-00500d183066"
   fonts:
-    fontFamily: "DejaVu Mono"
-    preview: "rrtrtgrtgrtgrtgrtgtrgrt"
-  "markdown-preview":
-    {}
-  "merge-conflicts":
-    {}
+    fontFamily: "Fira Mono"
+  "linter-phpcs":
+    codeStandardOrConfigFile: "Chas"
+    includePatterns: [
+      "source.js"
+      "source.php"
+    ]
+  "symbols-tree-view": {}
   tabs:
     usePreviewTabs: true
-  "autocomplete-plus":
-    {}
+  welcome:
+    showOnStartup: false

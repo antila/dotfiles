@@ -1,9 +1,7 @@
 #!/bin/sh
 
-if test ! $(which atom)
-then
-  echo "  Installing atom.io for you."
-  wget https://atom.io/download/deb -O /tmp/atom.deb
-  sudo dpkg -i /tmp/atom.deb
-  rm /tmp/atom.deb
-fi
+# Grab latest atom, also used as update
+echo "Downloading latest version of Atom"
+wget -q https://github.com/atom/atom/releases/latest -O /tmp/latest
+wget -q $(awk -F '[<>]' '/href=".*atom-amd64.deb/ {match($0,"href=\"(.*.deb)\"",a); print "https://github.com/" a[1]} ' /tmp/latest) -O /tmp/atom-amd64.deb
+sudo dpkg -i /tmp/atom-amd64.deb

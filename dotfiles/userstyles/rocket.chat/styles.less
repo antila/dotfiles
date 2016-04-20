@@ -1,0 +1,100 @@
+// One Dark theme for Rocket Chat
+@page-background: #282C34;
+@sidebar-background: #21252B;
+@highlight-row: #2C323C;
+
+@mono-1: #abb2bf;
+@mono-2: #828997;
+@mono-3: #5c6370;
+
+@namespace url(http://www.w3.org/1999/xhtml);
+
+@-moz-document domain("rocket.chas.se") {
+    #rocket-chat {
+        background-color: @page-background;
+    }
+
+    .fixed-title,
+    .flex-tab-bar,
+    .side-nav .header,
+    .side-nav .footer,
+    .side-nav .rooms-list,
+    .account-box .options,
+    .messages-container .footer {
+        background-color: @sidebar-background !important;
+    }
+
+    .message {
+        .info {
+            color: #5c6370;
+        }
+        .user {
+            color: #828997;
+        }
+
+        &:hover {
+            background-color: @highlight-row;
+        }
+    }
+
+    body {
+        color: @mono-1;
+        font-family: "Fira Mono";
+    }
+
+    a {
+        color: #528bff;
+    }
+
+    .users-typing,
+    .messages-container .message-form .users-typing,
+    .account-box .info {
+        background-color: transparent;
+        background: none;
+    }
+
+    .fixed-title,
+    .flex-tab-bar,
+    .footer {
+        border-color: #000 !important;
+    }
+
+    .messages-container .message-form .formatting-tips {
+        color: @mono-2;
+    }
+
+    .flex-tab-bar .tab-button,
+    .messages-container .message-form > div > .mic,
+    .messages-container .message-form > div > .file,
+    textarea, select, input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="password"] {
+        color: @mono-1;
+        background-color: @page-background;
+        border-color: transparent !important;
+    }
+
+
+    .mono-1 {
+      color: @mono-1;
+    }
+    .mono-2 {
+      color: #828997;
+    }
+    .mono-3 {
+      color: #5c6370;
+    }
+    .syntax-fg {
+      color: @mono-1;
+    }
+    .syntax-bg {
+      color: #282c34;
+    }
+    .syntax-gutter {
+      color: #636d83;
+    }
+    .syntax-guide {
+      color: rgba(171, 178, 191, 0.15);
+    }
+    .syntax-accent {
+      color: #528bff;
+    }
+}

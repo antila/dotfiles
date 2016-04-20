@@ -1,0 +1,83 @@
+@namespace url(http://www.w3.org/1999/xhtml);
+@-moz-document domain("rocket.chas.se") {
+  #rocket-chat {
+    background-color: #282c34;
+  }
+  .fixed-title,
+  .flex-tab-bar,
+  .side-nav .header,
+  .side-nav .footer,
+  .side-nav .rooms-list,
+  .account-box .options,
+  .messages-container .footer {
+    background-color: #21252b !important;
+  }
+  .message .info {
+    color: #5c6370;
+  }
+  .message .user {
+    color: #828997;
+  }
+  .message:hover {
+    background-color: #2c323c;
+  }
+  body {
+    color: #abb2bf;
+    font-family: "Fira Mono";
+  }
+  a {
+    color: #528bff;
+  }
+  .users-typing,
+  .messages-container .message-form .users-typing,
+  .account-box .info {
+    background-color: transparent;
+    background: none;
+  }
+  .fixed-title,
+  .flex-tab-bar,
+  .footer {
+    border-color: #000 !important;
+  }
+  .messages-container .message-form .formatting-tips {
+    color: #828997;
+  }
+  .flex-tab-bar .tab-button,
+  .messages-container .message-form > div > .mic,
+  .messages-container .message-form > div > .file,
+  textarea,
+  select,
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="password"] {
+    color: #abb2bf;
+    background-color: #282c34;
+    border-color: transparent !important;
+  }
+  .mono-1 {
+    color: #abb2bf;
+  }
+  .mono-2 {
+    color: #828997;
+  }
+  .mono-3 {
+    color: #5c6370;
+  }
+  .syntax-fg {
+    color: #abb2bf;
+  }
+  .syntax-bg {
+    color: #282c34;
+  }
+  .syntax-gutter {
+    color: #636d83;
+  }
+  .syntax-guide {
+    color: rgba(171, 178, 191, 0.15);
+  }
+  .syntax-accent {
+    color: #528bff;
+  }
+}

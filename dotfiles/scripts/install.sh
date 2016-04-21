@@ -1,2 +1,2 @@
-PATH=$PATH:/path/to/bin
-export PATH
+# PATH=$PATH:/path/to/bin
+# export PATH

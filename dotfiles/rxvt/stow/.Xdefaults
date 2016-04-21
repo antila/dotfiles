@@ -15,8 +15,8 @@
 ! ░░░░░░░░░░
 !
 ! █▓▒░ fonts
-urxvt*font: xft:ProggyCleanTT:size=12:antialias=false
-urxvt*boldFont: xft:ProggyCleanTT:size=12:antialias=false
+urxvt*font: xft:FiraCode-Medium:size=10:antialias=true
+urxvt*boldFont: xft:FiraCode-Medium:size=10:antialias=true
 urxvt*lineSpace: -1
 
 ! █▓▒░ interface

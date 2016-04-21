@@ -1,3 +1,2 @@
-dotfiles/sublime-text-3/stow/.config/sublime-text-3/Packages/
-dotfiles/atom/stow/.atom/packages
-dotfiles/atom/stow/.atom/storage
+dotfiles/atom/stow/.atom/*
+dotfiles/mozilla/stow/.mozilla/firefox/wfq8mu31.default/*

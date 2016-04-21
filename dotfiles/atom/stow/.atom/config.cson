@@ -2,7 +2,8 @@
   core: {}
   docblockr: {}
   editor:
-    fontSize: 17
+    fontFamily: "Fira Code"
+    fontSize: 18
     invisibles: {}
     showIndentGuide: true
     showInvisibles: true

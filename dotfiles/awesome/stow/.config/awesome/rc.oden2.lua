@@ -22,10 +22,10 @@ tyrannical.tags = {
         -- exclusive   = true,
         layout      = awful.layout.suit.tile,
         exec_once   = {
-            "iceweasel"
+            -- "firefox"
         },
         class       = {
-            "Iceweasel"
+            "Firefox"
         }
     },
     {

@@ -10,6 +10,8 @@ flashplugin-nonfree
 vim
 git-gui
 ack-grep
+curl
+arandr
 
 # Screensavers!
 xscreensaver

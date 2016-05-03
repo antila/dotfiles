@@ -41,3 +41,5 @@
 	enabled = true
 [gui]
 	recentrepo = /home/aantila/oden
+[sequence]
+	editor = rebase-editor

@@ -63,15 +63,34 @@
         color: @mono-2;
     }
 
-    .flex-tab-bar .tab-button,
-    .messages-container .message-form > div > .mic,
-    .messages-container .message-form > div > .file,
+    /* Text input */
+    .messages-container .message-form > .message-input > .file,
+    .messages-container .message-form > .message-input .message-buttons,
+    .messages-container .message-form > .message-input {
+        border-color: transparent;
+        background: @page-background;
+    }
+    .flex-tab-bar .tab-button, /* Sidebar buttons */
     textarea, select, input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="password"] {
         color: @mono-1;
         background-color: @page-background;
         border-color: transparent !important;
     }
 
+    /* User badge (admins/users/etc) */
+    .message .info .is-bot,
+    .message .info .role-tag {
+        background: none;
+        float: right;
+        color: @mono-3;
+    }
+
+    /* Code snippets */
+    .hljs {
+        background: @sidebar-background;
+        border-color: #000;
+        color: @mono-1;
+    }
 
     .mono-1 {
       color: @mono-1;

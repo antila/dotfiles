@@ -1,7 +1,7 @@
 @namespace url(http://www.w3.org/1999/xhtml);
 @-moz-document domain("rocket.chas.se") {
   #rocket-chat {
-    background-color: #282c34;
+    background-color: #282C34;
   }
   .fixed-title,
   .flex-tab-bar,
@@ -10,7 +10,7 @@
   .side-nav .rooms-list,
   .account-box .options,
   .messages-container .footer {
-    background-color: #21252b !important;
+    background-color: #21252B !important;
   }
   .message .info {
     color: #5c6370;
@@ -19,7 +19,7 @@
     color: #828997;
   }
   .message:hover {
-    background-color: #2c323c;
+    background-color: #2C323C;
   }
   body {
     color: #abb2bf;
@@ -42,9 +42,14 @@
   .messages-container .message-form .formatting-tips {
     color: #828997;
   }
+  /* Text input */
+  .messages-container .message-form > .message-input > .file,
+  .messages-container .message-form > .message-input .message-buttons,
+  .messages-container .message-form > .message-input {
+    border-color: transparent;
+    background: #282C34;
+  }
   .flex-tab-bar .tab-button,
-  .messages-container .message-form > div > .mic,
-  .messages-container .message-form > div > .file,
   textarea,
   select,
   input[type="text"],
@@ -53,8 +58,21 @@
   input[type="url"],
   input[type="password"] {
     color: #abb2bf;
-    background-color: #282c34;
+    background-color: #282C34;
     border-color: transparent !important;
+  }
+  /* User badge (admins/users/etc) */
+  .message .info .is-bot,
+  .message .info .role-tag {
+    background: none;
+    float: right;
+    color: #5c6370;
+  }
+  /* Code snippets */
+  .hljs {
+    background: #21252B;
+    border-color: #000;
+    color: #abb2bf;
   }
   .mono-1 {
     color: #abb2bf;

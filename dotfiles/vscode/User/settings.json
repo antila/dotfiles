@@ -1,0 +1,18 @@
+// Place your settings in this file to overwrite the default settings
+{
+    "editor.minimap.enabled": true,
+    "editor.renderWhitespace": "all",
+    "files.trimTrailingWhitespace": true,
+    "window.zoomLevel": 0,
+    "cSpell.userWords": [
+        "Leaderboards",
+        "customise",
+        "Leaderboard",
+        "Scriptable",
+        "COOLDOWN",
+        "backend",
+        "initialise",
+        "timestamps"
+    ],
+    "window.menuBarVisibility": "default"
+}

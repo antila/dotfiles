@@ -1,6 +1,0 @@
-'createOnChange': true,
-'forceOverwrite': true,
-'packages': [
-    'language-twig',
-    'minimap'
-]

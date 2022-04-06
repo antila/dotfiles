@@ -1,19 +1,16 @@
 # figlet - Make large character ASCII banners out of ordinary text
 figlet
 
-# pidgin - graphical multi-protocol instant messaging client for X
-pidgin
+# RAINBOWS
+lolcat
 
-# Flash :(
-flashplugin-nonfree
-
+# tools/work
 vim
 git-gui
-ack-grep
 curl
-arandr
-gnome-do
-npm
+
+# A command-line fuzzy finder
+fzf
 
 # Screensavers!
 xscreensaver

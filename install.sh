@@ -35,8 +35,6 @@ install_dotfiles () {
     stow --dir="$src/.." --target=$HOME stow
     info " - Checking: $src"
   done
-
-  sudo stow --dir="$DOTFILES_ROOT/system/" --target=/ stow
 }
 
 run_installers () {

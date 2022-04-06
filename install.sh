@@ -48,8 +48,19 @@ run_installers () {
 install_aptitude_stuff () {
   # find the installers and run them iteratively
   info 'Installing apt stuff:'
-  info -- $(grep -vE "^\s*#" .auto-install  | tr "\n" " ")
-  sudo apt-get install -y $(grep -vE "^\s*#" .auto-install  | tr "\n" " ")
+  TO_INSTALL=$(grep -vE "^\s*#" .auto-install  | tr "\n" " ")
+  TO_INSTALL_ARRAY=($TO_INSTALL)
+
+  for i in "${TO_INSTALL_ARRAY[@]}"
+    do
+      if [ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ];
+        then
+          info "  Installing $i"
+          sudo apt-get install $i;
+        else
+          success "- $i already installed"
+      fi
+  done
 }
 
 if [ "$EUID" -ne 0 ]; then

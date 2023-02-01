@@ -27,6 +27,7 @@ precmd() {
     printf "\x1b]0;%s\x07" "$FOLDER" 
 }
 
+PATH=$PATH:~/.cargo/bin/navi
 PATH=$PATH:~/.local/bin/bat
 export PATH="$(yarn global bin):$PATH"
 
@@ -69,3 +70,4 @@ load-nvmrc
 if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
   source /etc/profile.d/vte-2.91.sh
 fi
+

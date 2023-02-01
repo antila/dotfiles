@@ -27,6 +27,7 @@ precmd() {
     printf "\x1b]0;%s\x07" "$FOLDER"
 }
 
+PATH=$PATH:~/.cargo/bin/navi
 PATH=$PATH:~/.local/bin/bat
 export PATH="$(yarn global bin):$PATH"
 

@@ -19,12 +19,12 @@ eval "$(direnv hook zsh)"
 # Set window title to command just before running it.
 preexec() {
     FOLDER=${PWD/\/home\/anders/"~"}
-    printf "\x1b]0;%s\x07" "$FOLDER/$1"; 
+    printf "\x1b]0;%s\x07" "$FOLDER/$1";
 }
 # Set window title to current working directory after returning from a command.
 precmd() {
     FOLDER=${PWD/\/home\/anders/"~"}
-    printf "\x1b]0;%s\x07" "$FOLDER" 
+    printf "\x1b]0;%s\x07" "$FOLDER"
 }
 
 PATH=$PATH:~/.cargo/bin/navi
@@ -71,3 +71,4 @@ if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
   source /etc/profile.d/vte-2.91.sh
 fi
 
+source ~/.zshrc_secrets

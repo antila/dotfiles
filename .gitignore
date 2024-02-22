@@ -1,3 +1,4 @@
 dotfiles/atom/stow/.atom/*
 dotfiles/mozilla/stow/.mozilla/firefox/wfq8mu31.default/*
 dotfiles/fonts/stow/.fonts/.uuid
+dotfiles/shell/stow/.zshrc_secrets

@@ -25,7 +25,7 @@ then
   sudo apt-get install -y exa
 fi
 
-if test ! $(which neovim)
+if test ! $(which nvim)
 then
   echo "  Installing neovim"
   sudo apt-get install -y neovim

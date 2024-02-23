@@ -13,12 +13,6 @@ then
   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
 fi
 
-if test ! $(which nvm)
-then
-  echo "  Installing nvm"
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-fi
-
 if test ! $(which exa)
 then
   echo "  Installing exa"
@@ -35,6 +29,14 @@ if test ! $(which direnv)
 then
   echo "  Installing direnv"
   sudo apt-get install -y direnv
+fi
+
+if test ! $(which atuin)
+then
+  echo "  Installing atuin"
+  # nice history
+  /bin/bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)"
+  atuin import auto
 fi
 
 if test ! $(which bat)

@@ -72,3 +72,5 @@ if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
 fi
 
 source ~/.zshrc_secrets
+
+eval "$(atuin init zsh)"

@@ -39,7 +39,7 @@ then
   atuin import auto
 fi
 
-if test ! $(which bat)
+if [ ! -f /usr/bin/batcat ]
 then
   echo "  Installing bat"
 

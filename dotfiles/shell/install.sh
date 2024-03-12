@@ -8,6 +8,8 @@ then
   # Set as shell
   chsh -s $(which zsh)
 
+  curl -sS https://starship.rs/install.sh | sh
+
   # Download presto
   # https://github.com/sorin-ionescu/prezto
   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"

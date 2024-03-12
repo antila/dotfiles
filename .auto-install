@@ -12,14 +12,5 @@ curl
 # A command-line fuzzy finder
 fzf
 
-# Screensavers!
-xscreensaver
-xscreensaver-data
-xscreensaver-data-extra
-xscreensaver-gl
-xscreensaver-gl-extra
-xscreensaver-screensaver-bsod
-xscreensaver-screensaver-webcollage
-
 # Yubikey
 gnupg2

@@ -44,9 +44,8 @@ run_installers () {
 }
 
 install_aptitude_stuff () {
-  # find the installers and run them iteratively
   info 'Installing apt stuff:'
-  TO_INSTALL=$(grep -vE "^\s*#" .auto-install  | tr "\n" " ")
+  TO_INSTALL=$(cat .auto-install-apt | sed '/^\(#\|[[:space:]]*$\)/d;s/#.*//g' | tr "\n" " ")
   TO_INSTALL_ARRAY=($TO_INSTALL)
 
   for i in "${TO_INSTALL_ARRAY[@]}"
@@ -61,14 +60,18 @@ install_aptitude_stuff () {
   done
 }
 
-if [ "$EUID" -ne 0 ]; then
-    run_installers
-    install_dotfiles
-    install_aptitude_stuff
-    echo ''
-    success '  All installed!'
-    exit
-else
-    fail "Don't run this as root."
-    exit
-fi
+install_homebrew_stuff () {
+  info 'Installing homebrew stuff:'
+  TO_INSTALL=$(cat .auto-install-brew | sed '/^\(#\|[[:space:]]*$\)/d;s/#.*//g' | tr "\n" " ")
+  TO_INSTALL_ARRAY=($TO_INSTALL)
+
+  for i in "${TO_INSTALL_ARRAY[@]}"
+    do
+      if brew list $i &>/dev/null; then
+        echo "${i} is already installed"
+      else
+        brew install $i && echo "$i is installed"
+      fi
+  done
+}
+

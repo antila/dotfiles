@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
-#
-# bootstrap installs things.
 
-# Load the test function
 source "./common/functions.sh"
 
-cd "../$(dirname "$0")/"
-DOTFILES_ROOT=$(pwd)/dotfiles
+cd $ROOT_DIR/osx
 
 set -e
 

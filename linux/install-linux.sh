@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-#
-# bootstrap installs things.
 
-cd "$(dirname "$0")/"
-DOTFILES_ROOT=$(pwd)/dotfiles
+source "./common/functions.sh"
+
+cd $ROOT_DIR/linux
 
 set -e
 

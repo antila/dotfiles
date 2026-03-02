@@ -2,8 +2,8 @@
 #
 # bootstrap installs things.
 
-cd "$(dirname "$0")/"
-DOTFILES_ROOT=$(pwd)/dotfiles
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+export ROOT_DIR=$(dirname "$SCRIPT_DIR")
 
 set -e
 
@@ -30,9 +30,9 @@ fail () {
 install_dotfiles () {
   info 'Installing dotfiles:'
 
-  for src in $(find "$DOTFILES_ROOT/" -maxdepth 2 -path ./system -prune -o -name 'stow')
+  for src in $(find "dotfiles/" -maxdepth 2 -path ./system -prune -o -name 'stow')
   do
-    stow --dir="$src/.." --target=$HOME stow
+    stow --dir="$src/.." --target=$HOME stow --adopt
     info " - Checking: $src"
   done
 }
@@ -40,7 +40,7 @@ install_dotfiles () {
 run_installers () {
   # find the installers and run them iteratively
   info 'Installing stuff:'
-  find "$DOTFILES_ROOT/" -name install.sh | while read installer ; do sh -c "${installer}" ; done
+  find "dotfiles/" -name install.sh | while read installer ; do sh -c "${installer}" ; done
 }
 
 install_aptitude_stuff () {

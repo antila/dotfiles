@@ -12,6 +12,7 @@ if [ "$EUID" -ne 0 ]; then
     run_installers
     install_dotfiles
     install_aptitude_stuff
+    install_homebrew_stuff
     echo ''
     success '  All installed!'
     exit

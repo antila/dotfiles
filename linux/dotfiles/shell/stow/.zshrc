@@ -74,3 +74,5 @@ fi
 source ~/.zshrc_secrets
 
 eval "$(atuin init zsh)"
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"

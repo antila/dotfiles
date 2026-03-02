@@ -32,7 +32,7 @@ install_dotfiles () {
 
   for src in $(find "dotfiles/" -maxdepth 2 -path ./system -prune -o -name 'stow')
   do
-    stow --dir="$src/.." --target=$HOME stow --adopt
+    stow --dir="$src/.." --target=$HOME stow
     info " - Checking: $src"
   done
 }
@@ -61,6 +61,13 @@ install_aptitude_stuff () {
 }
 
 install_homebrew_stuff () {
+  if test ! $(which brew)
+  then
+    echo "  Installing brew"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+  fi
+
   info 'Installing homebrew stuff:'
   TO_INSTALL=$(cat .auto-install-brew | sed '/^\(#\|[[:space:]]*$\)/d;s/#.*//g' | tr "\n" " ")
   TO_INSTALL_ARRAY=($TO_INSTALL)

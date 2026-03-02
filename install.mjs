@@ -1,9 +1,9 @@
 #!/usr/bin/env zx
 
 if (process.platform === 'linux') {
-    await $`./linux/install-linux.sh`;
+  await import('./linux/install-linux.mjs');
 } else if (process.platform === 'darwin') {
-    await $`./osx/install-osx.sh`;
+  await import('./osx/install-osx.mjs');
 } else {
-    console.log('Unknown.');
+  console.log('Unknown.');
 }

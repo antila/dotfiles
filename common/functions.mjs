@@ -44,28 +44,36 @@ export async function commandExists(command) {
 export async function install_dotfiles() {
   info('Installing dotfiles:');
 
-  const output = await $`find dotfiles/ -maxdepth 2 -path ./system -prune -o -name stow -print`;
+  const output =
+    await $`find dotfiles/ -maxdepth 2 -path ./system -prune -o -name stow -print`;
   /** @type {string[]} */
-  const sources = String(output.stdout).split('\n').map((line) => line.trim()).filter(Boolean);
+  const sources = String(output.stdout)
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
 
   for (const src of sources) {
     info(` - Checking: ${src}`);
     try {
       await $`stow --dir=${path.join(src, '..')} --target=${process.env.HOME} stow`;
-    } catch {
-    }
+    } catch {}
   }
 }
 
-export async function run_installers() {
+export async function run_installers(folder) {
   info('Installing stuff:');
 
-  const output = await $`find dotfiles/ -name install.sh`;
+  const output = await $`find dotfiles/ -name install.mjs`;
   /** @type {string[]} */
-  const installers = String(output.stdout).split('\n').map((line) => line.trim()).filter(Boolean);
+  const installers = String(output.stdout)
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
 
   for (const installer of installers) {
-    await $`${installer}`;
+    const file = path.join(ROOT_DIR, folder, installer);
+    info(` - ${installer}`);
+    await import(file);
   }
 }
 

@@ -11,7 +11,8 @@ if (!(await fs.pathExists('/etc/udev/rules.d/70-yubikey.rules'))) {
 
   await fs.ensureDir(`${process.env.HOME}/.gnupg`);
   await fs.appendFile(`${process.env.HOME}/.gnupg/gpg.conf`, 'use-agent\n');
-  await fs.appendFile(`${process.env.HOME}/.gnupg/gpg-agent.conf`, 'enable-ssh-support\n');
+  await fs.appendFile(
+    `${process.env.HOME}/.gnupg/gpg-agent.conf`,
+    'enable-ssh-support\n',
+  );
 }
-
-

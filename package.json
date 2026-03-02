@@ -1,0 +1,26 @@
+{
+	"name": "dotfiles",
+	"version": "1.0.0",
+	"description": "* `sudo apt-get install stow git`  * `npm install -g zx`  * `git clone git@github.com:antila/dotfiles.git ~/.dotfiles`  * `./.dotfiles/install.mjs`",
+	"homepage": "https://github.com/antila/dotfiles#readme",
+	"bugs": {
+		"url": "https://github.com/antila/dotfiles/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/antila/dotfiles.git"
+	},
+	"license": "ISC",
+	"author": "",
+	"type": "commonjs",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"dependencies": {
+		"zx": "^8.8.5"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.5"
+	}
+}

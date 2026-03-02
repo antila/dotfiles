@@ -1,52 +1,54 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zx
 
-if test ! $(which zsh)
-then
-  echo "  Installing zsh"
-  sudo apt-get install -y zsh
+async function has(command) {
+  try {
+    await $`which ${command}`;
+    return true;
+  } catch {
+    return false;
+  }
+}
 
-  # Set as shell
-  chsh -s $(which zsh)
+if (!(await has('zsh'))) {
+  console.log('  Installing zsh');
+  await $`sudo apt-get install -y zsh`;
 
-  curl -sS https://starship.rs/install.sh | sh
+  const zshPath = (await $`which zsh`).stdout.trim();
+  await $`chsh -s ${zshPath}`;
+  await $`bash -lc "curl -sS https://starship.rs/install.sh | sh"`;
 
-  # Download presto
-  # https://github.com/sorin-ionescu/prezto
-  git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
-fi
+  const preztoDir = `${process.env.ZDOTDIR || process.env.HOME}/.zprezto`;
+  if (!(await fs.pathExists(preztoDir))) {
+    await $`git clone --recursive https://github.com/sorin-ionescu/prezto.git ${preztoDir}`;
+  }
+}
 
-if test ! $(which exa)
-then
-  echo "  Installing exa"
-  sudo apt-get install -y exa
-fi
+if (!(await has('exa'))) {
+  console.log('  Installing exa');
+  await $`sudo apt-get install -y exa`;
+}
 
-if test ! $(which nvim)
-then
-  echo "  Installing neovim"
-  sudo apt-get install -y neovim
-fi
+if (!(await has('nvim'))) {
+  console.log('  Installing neovim');
+  await $`sudo apt-get install -y neovim`;
+}
 
-if test ! $(which direnv)
-then
-  echo "  Installing direnv"
-  sudo apt-get install -y direnv
-fi
+if (!(await has('direnv'))) {
+  console.log('  Installing direnv');
+  await $`sudo apt-get install -y direnv`;
+}
 
-if test ! $(which atuin)
-then
-  echo "  Installing atuin"
-  # nice history
-  /bin/bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)"
-  atuin import auto
-fi
+if (!(await has('atuin'))) {
+  console.log('  Installing atuin');
+  await $`/bin/bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)"`;
+  await $`atuin import auto`;
+}
 
-if [ ! -f /usr/bin/batcat ]
-then
-  echo "  Installing bat"
-
-  # nicer cat
-  sudo apt-get install -y bat
-  mkdir -p ~/.local/bin
-  ln -s /usr/bin/batcat ~/.local/bin/bat
-fi
+if (!(await fs.pathExists('/usr/bin/batcat'))) {
+  console.log('  Installing bat');
+  await $`sudo apt-get install -y bat`;
+  await fs.ensureDir(`${process.env.HOME}/.local/bin`);
+  if (!(await fs.pathExists(`${process.env.HOME}/.local/bin/bat`))) {
+    await $`ln -s /usr/bin/batcat ${process.env.HOME}/.local/bin/bat`;
+  }
+}

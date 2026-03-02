@@ -1,7 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env zx
 
-if test ! $(which vim)
-then
-  echo "  Installing vim for you."
-  sudo apt-get install -y vim
-fi
+try {
+  await $`which vim`;
+} catch {
+  console.log('  Installing vim for you.');
+  await $`sudo apt-get install -y vim`;
+}

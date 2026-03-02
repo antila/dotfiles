@@ -1,10 +1,10 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zx
 
-if test ! $(which atuin)
-then
-  echo "  Installing atuin"
-  # nice history
-  curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
-  PATH=$PATH:~/.atuin/bin
-  atuin import auto
-fi
+try {
+  await $`which atuin`;
+} catch {
+  console.log('  Installing atuin');
+  await $`bash -lc "curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh"`;
+  process.env.PATH = `${process.env.PATH}:${process.env.HOME}/.atuin/bin`;
+  await $`atuin import auto`;
+}

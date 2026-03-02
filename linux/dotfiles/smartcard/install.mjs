@@ -1,15 +1,17 @@
-#!/bin/sh
+#!/usr/bin/env zx
 
-if test ! $(which gpgsm)
-then
-  sudo apt-get install -y gpgsm gnupg-agent pcscd
-fi
+try {
+  await $`which gpgsm`;
+} catch {
+  await $`sudo apt-get install -y gpgsm gnupg-agent pcscd`;
+}
 
-if [ ! -f "/etc/udev/rules.d/70-yubikey.rules" ]; then
-  sudo cp ./dotfiles/smartcard/70-yubikey.rules /etc/udev/rules.d
+if (!(await fs.pathExists('/etc/udev/rules.d/70-yubikey.rules'))) {
+  await $`sudo cp ./dotfiles/smartcard/70-yubikey.rules /etc/udev/rules.d`;
 
-  echo "use-agent" >> ~/.gnupg/gpg.conf
-  echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
-fi
+  await fs.ensureDir(`${process.env.HOME}/.gnupg`);
+  await fs.appendFile(`${process.env.HOME}/.gnupg/gpg.conf`, 'use-agent\n');
+  await fs.appendFile(`${process.env.HOME}/.gnupg/gpg-agent.conf`, 'enable-ssh-support\n');
+}
 
 

@@ -41,6 +41,34 @@ export async function commandExists(command) {
   }
 }
 
+/** @param {string} dir */
+async function listFilesRecursive(dir) {
+  /** @type {string[]} */
+  const files = [];
+
+  /** @param {string} currentDir @param {string} prefix */
+  async function walk(currentDir, prefix = '') {
+    const entries = await fs.readdir(currentDir, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const relativePath = path.join(prefix, entry.name);
+      const absolutePath = path.join(currentDir, entry.name);
+
+      if (entry.isDirectory()) {
+        await walk(absolutePath, relativePath);
+        continue;
+      }
+
+      if (entry.isFile() || entry.isSymbolicLink()) {
+        files.push(relativePath);
+      }
+    }
+  }
+
+  await walk(dir);
+  return files;
+}
+
 export async function install_dotfiles() {
   info('Installing dotfiles:');
 
@@ -55,6 +83,24 @@ export async function install_dotfiles() {
   for (const src of sources) {
     info(` - Checking: ${src}`);
     try {
+      const stowDir = path.join(src);
+      const files = await listFilesRecursive(stowDir);
+
+      for (const file of files) {
+        const target = path.join(process.env.HOME, file);
+        if (!(await fs.pathExists(target))) {
+          continue;
+        }
+
+        const stat = await fs.lstat(target);
+        if (stat.isSymbolicLink()) {
+          info(`   - Updating existing symlink: ${target}`);
+          await fs.remove(target);
+        } else {
+          info(`   - ${file}`);
+        }
+      }
+
       await $`stow --dir=${path.join(src, '..')} --target=${process.env.HOME} stow`;
     } catch {}
   }

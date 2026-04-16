@@ -23,9 +23,9 @@ if (!(await has('zsh'))) {
   }
 }
 
-if (!(await has('exa'))) {
-  console.log('  Installing exa');
-  await $`sudo apt-get install -y exa`;
+if (!(await has('eza'))) {
+  console.log('  Installing eza');
+  await $`sudo apt-get install -y eza`;
 }
 
 if (!(await has('nvim'))) {

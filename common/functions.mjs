@@ -1,5 +1,5 @@
+import { fileURLToPath } from 'node:url';
 import { $, chalk, fs, path } from 'zx';
-import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,9 +22,11 @@ export function success(message) {
 }
 
 /** @param {string} message */
-export function fail(message) {
+export function fail(message, exit = true) {
   console.error(`\r  [${chalk.red('FAIL')}] ${message}`);
-  process.exit(1);
+  if (exit) {
+    process.exit(1);
+  }
 }
 
 export function isRoot() {
@@ -81,28 +83,33 @@ export async function install_dotfiles() {
     .filter(Boolean);
 
   for (const src of sources) {
-    info(` - Checking: ${src}`);
-    try {
-      const stowDir = path.join(src);
-      const files = await listFilesRecursive(stowDir);
+    const stowDir = path.join(src);
+    info(` - Checking: ${stowDir}`);
+    const files = await listFilesRecursive(stowDir);
 
-      for (const file of files) {
-        const target = path.join(process.env.HOME, file);
-        if (!(await fs.pathExists(target))) {
-          continue;
-        }
+    for (const file of files) {
+      const target = path.join(process.env.HOME, file);
 
+      const createSymlink = async () => {
+        await $`stow --dir=${path.join(src, '..')} --target=${process.env.HOME} stow`;
+      };
+
+      if (!(await fs.pathExists(target))) {
+        info(`   - Creating new symlink: ${target}`);
+        await createSymlink();
+      } else {
         const stat = await fs.lstat(target);
         if (stat.isSymbolicLink()) {
           info(`   - Updating existing symlink: ${target}`);
           await fs.remove(target);
+          await createSymlink();
         } else {
-          info(`   - ${file}`);
+          info(
+            `   - ${file} already exists and is not a symlink, skipping: ${target}`,
+          );
         }
       }
-
-      await $`stow --dir=${path.join(src, '..')} --target=${process.env.HOME} stow`;
-    } catch {}
+    }
   }
 }
 

@@ -1,11 +1,8 @@
-# Sample gitconfig
-#
-
 [hub]
         protocol = https
 [user]
         name = Anders Antila
-        email = anders.antila@chas.se
+        email = anders@antila.se
 [credential]
         helper = cache
 [alias]

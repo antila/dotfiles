@@ -1,5 +1,9 @@
 # .zshrc
 
+export LANG="en_US.utf8"
+export LANGUAGE="en_US.utf8"
+export LC_ALL="en_US.utf8"
+
 alias ls='exa -l --group-directories-first'
 alias vim='nvim'
 
@@ -77,10 +81,6 @@ eval "$(atuin init zsh)"
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-
 # pnpm
 export PNPM_HOME="/home/anders/.local/share/pnpm"
 case ":$PATH:" in
@@ -90,3 +90,9 @@ esac
 # pnpm end
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.config/composer/vendor/bin:$PATH"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"

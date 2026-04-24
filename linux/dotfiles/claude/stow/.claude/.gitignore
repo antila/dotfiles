@@ -1,0 +1,11 @@
+.credentials*
+backups
+cache
+file-history
+plugins
+history*
+ide
+projects
+sessions
+shell-snapshots
+stats-cache.json

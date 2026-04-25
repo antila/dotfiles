@@ -87,3 +87,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 typeset -gF _zsh_init_total_ms=$(( (EPOCHREALTIME - _zsh_init_start) * 1000 ))
 printf '[zsh-init] %-26s %8.2f ms\n' 'total startup' "$_zsh_init_total_ms"
 
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# filen-cli
+PATH=$PATH:~/.filen-cli/bin

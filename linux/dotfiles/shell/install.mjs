@@ -12,15 +12,19 @@ async function has(command) {
 if (!(await has('zsh'))) {
   console.log('  Installing zsh');
   await $`sudo apt-get install -y zsh`;
-
   const zshPath = (await $`which zsh`).stdout.trim();
   await $`chsh -s ${zshPath}`;
-  await $`bash -lc "curl -sS https://starship.rs/install.sh | sh"`;
+}
 
-  const preztoDir = `${process.env.ZDOTDIR || process.env.HOME}/.zprezto`;
-  if (!(await fs.pathExists(preztoDir))) {
-    await $`git clone --recursive https://github.com/sorin-ionescu/prezto.git ${preztoDir}`;
-  }
+if (!(await has('starship'))) {
+  console.log('  Installing starship');
+  await $`bash -lc "curl -sS https://starship.rs/install.sh | sh"`;
+}
+
+const preztoDir = `${process.env.ZDOTDIR || process.env.HOME}/.zprezto`;
+if (!(await fs.pathExists(preztoDir))) {
+  console.log('  Installing prezto');
+  await $`git clone --recursive https://github.com/sorin-ionescu/prezto.git ${preztoDir}`;
 }
 
 if (!(await has('eza'))) {

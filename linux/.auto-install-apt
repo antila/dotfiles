@@ -12,8 +12,5 @@ curl
 # A command-line fuzzy finder
 fzf
 
-# Yubikey
-gnupg2
-
 # nice terminal
 ghostty

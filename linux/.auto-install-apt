@@ -14,3 +14,6 @@ fzf
 
 # Yubikey
 gnupg2
+
+# nice terminal
+ghostty

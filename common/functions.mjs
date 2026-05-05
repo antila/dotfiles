@@ -91,7 +91,7 @@ export async function install_dotfiles() {
       const target = path.join(process.env.HOME, file);
 
       const createSymlink = async () => {
-        await $`stow --dir=${path.join(src, '..')} --target=${process.env.HOME} stow`;
+        await $`stow --adopt --dir=${path.join(src, '..')} --target=${process.env.HOME} stow`;
       };
 
       if (!(await fs.pathExists(target))) {
@@ -160,7 +160,7 @@ export async function install_aptitude_stuff() {
 
     if (!installed) {
       info(`  Installing ${pkg}`);
-      await $`sudo apt-get install ${pkg}`;
+      await $`sudo apt-get install -y ${pkg}`;
     } else {
       success(`- ${pkg} already installed`);
     }
@@ -175,10 +175,11 @@ function setBrewPath() {
 }
 
 export async function install_homebrew_stuff() {
+  setBrewPath();
+
   if (!(await commandExists('brew'))) {
     console.log('  Installing brew');
     await $`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`;
-    setBrewPath();
   }
 
   info('Installing homebrew stuff:');

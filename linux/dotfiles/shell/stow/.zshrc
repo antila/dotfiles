@@ -3,34 +3,16 @@
 zmodload zsh/datetime
 typeset -gF _zsh_init_start=$EPOCHREALTIME
 
-profile_step() {
-  local label="$1"
-  shift
-  local -F start=$EPOCHREALTIME
-  "$@"
-  local exit_code=$?
-  local -F elapsed_ms=$(( (EPOCHREALTIME - start) * 1000 ))
-  printf '[zsh-init] %-26s %8.2f ms\n' "$label" "$elapsed_ms"
-  return $exit_code
+typeset -ga _zsh_init_log=()
+
+start_timer() {
+  typeset -g _timer_label="$1"
+  typeset -gF _timer_start=$EPOCHREALTIME
 }
 
-profile_eval_output() {
-  local label="$1"
-  shift
-  local -F start=$EPOCHREALTIME
-  eval "$("$@")"
-  local exit_code=$?
-  local -F elapsed_ms=$(( (EPOCHREALTIME - start) * 1000 ))
-  printf '[zsh-init] %-26s %8.2f ms\n' "$label" "$elapsed_ms"
-  return $exit_code
-}
-
-profile_source_if_exists() {
-  local label="$1"
-  local file="$2"
-  if [[ -s "$file" ]]; then
-    profile_step "$label" source "$file"
-  fi
+end_timer() {
+  local -F elapsed_ms=$(( (EPOCHREALTIME - _timer_start) * 1000 ))
+  _zsh_init_log+=("$(printf '[zsh-init] %-26s %8.2f ms' "$_timer_label" "$elapsed_ms")")
 }
 
 export LANG="en_US.utf8"
@@ -41,7 +23,9 @@ alias ls='exa -l --group-directories-first'
 alias vim='nvim'
 
 # starship prompt
-profile_eval_output "starship init" starship init zsh
+start_timer "starship init"
+eval "$(starship init zsh)"
+end_timer
 
 # proper history
 HISTFILE=~/.zsh_history
@@ -50,17 +34,28 @@ SAVEHIST=1000
 setopt SHARE_HISTORY
 
 # direnv for .env files
-profile_eval_output "direnv hook" direnv hook zsh
+start_timer "direnv hook"
+eval "$(direnv hook zsh)"
+end_timer
 
 PATH=$PATH:~/.cargo/bin/navi
 PATH=$PATH:~/.local/bin/bat
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
-profile_step "zshrc secrets" source ~/.zshrc_secrets
 
-profile_eval_output "atuin init" atuin init zsh
+if [[ -f ~/.zshrc_secrets ]]; then 
+  source ~/.zshrc_secrets; 
+else 
+  touch ~/.zshrc_secrets; 
+fi
 
-profile_eval_output "brew shellenv" /home/linuxbrew/.linuxbrew/bin/brew shellenv zsh
+start_timer "atuin init"
+eval "$(atuin init zsh)"
+end_timer
+
+start_timer "brew shellenv"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+end_timer
 
 # pnpm
 export PNPM_HOME="/home/anders/.local/share/pnpm"
@@ -74,7 +69,9 @@ esac
 FNM_PATH="/home/anders/.local/share/fnm"
 if [ -d "$FNM_PATH" ]; then
   export PATH="$FNM_PATH:$PATH"
-  profile_eval_output "fnm env" fnm env --shell zsh
+  start_timer "fnm env"
+  eval "$(fnm env --shell zsh)"
+  end_timer
 fi
 
 export PATH="$HOME/.local/bin:$PATH"
@@ -85,7 +82,11 @@ export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 typeset -gF _zsh_init_total_ms=$(( (EPOCHREALTIME - _zsh_init_start) * 1000 ))
-printf '[zsh-init] %-26s %8.2f ms\n' 'total startup' "$_zsh_init_total_ms"
+if (( _zsh_init_total_ms >= 200 )); then
+  printf '%s\n' "${_zsh_init_log[@]}"
+  printf '[zsh-init] %-26s %8.2f ms\n' 'total startup' "$_zsh_init_total_ms"
+fi
+unset _zsh_init_log
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 

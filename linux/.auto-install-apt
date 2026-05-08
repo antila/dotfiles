@@ -8,6 +8,7 @@ lolcat
 vim
 git-gui
 curl
+htop
 
 # A command-line fuzzy finder
 fzf

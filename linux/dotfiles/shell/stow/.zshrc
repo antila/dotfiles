@@ -91,3 +91,5 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # filen-cli
 PATH=$PATH:~/.filen-cli/bin
+
+. "$HOME/.atuin/bin/env"

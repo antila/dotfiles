@@ -1,10 +1,18 @@
 #!/usr/bin/env zx
 
-try {
-  await $`which atuin`;
-} catch {
+import { resolveCommand } from '../../../common/functions.mjs';
+
+const atuinCommand = await resolveCommand('atuin', [
+  `${process.env.HOME}/.atuin/bin/atuin`,
+]);
+
+if (!atuinCommand) {
   console.log('  Installing atuin');
   await $`bash -lc "curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh"`;
-  process.env.PATH = `${process.env.PATH}:${process.env.HOME}/.atuin/bin`;
-  await $`atuin import auto`;
+  const installedAtuinCommand = await resolveCommand('atuin', [
+    `${process.env.HOME}/.atuin/bin/atuin`,
+  ]);
+  if (installedAtuinCommand) {
+    await $`${installedAtuinCommand} import auto`;
+  }
 }

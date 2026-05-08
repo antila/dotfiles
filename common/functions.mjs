@@ -34,13 +34,34 @@ export function isRoot() {
 }
 
 /** @param {string} command */
-export async function commandExists(command) {
-  try {
-    await $`which ${command}`;
-    return true;
-  } catch {
-    return false;
+export async function resolveCommand(command, extraCandidates = []) {
+  const home = process.env.HOME || '';
+  const candidates = [
+    command,
+    home ? `${home}/.local/bin/${command}` : '',
+    home ? `${home}/.cargo/bin/${command}` : '',
+    ...extraCandidates,
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    try {
+      await $`command -v ${candidate}`;
+      return candidate;
+    } catch {
+      // Try next location.
+    }
+
+    if (candidate.includes('/') && (await fs.pathExists(candidate))) {
+      return candidate;
+    }
   }
+
+  return null;
+}
+
+/** @param {string} command */
+export async function commandExists(command) {
+  return !!(await resolveCommand(command));
 }
 
 /** @param {string} dir */
@@ -148,11 +169,12 @@ export async function install_aptitude_stuff() {
   const content = await fs.readFile('.auto-install-apt', 'utf8');
   /** @type {string[]} */
   const packages = parsePackageList(content);
+  const dpkgStatusFormat = '$' + '{Status}';
 
   for (const pkg of packages) {
     let installed = false;
     try {
-      const result = await $`dpkg-query -W -f=${'${Status}'} ${pkg}`;
+      const result = await $`dpkg-query -W -f=${dpkgStatusFormat} ${pkg}`;
       installed = result.stdout.includes('ok installed');
     } catch {
       installed = false;

@@ -1,8 +1,4 @@
 {
-  "statusLine": {
-    "type": "command",
-    "command": "bash /home/anders/.claude/statusline-command.sh"
-  },
   "hooks": {
     "PostToolUse": [
       {
@@ -37,6 +33,10 @@
         "matcher": "Bash"
       }
     ]
+  },
+  "statusLine": {
+    "command": "bash /home/anders/.claude/statusline-command.sh",
+    "type": "command"
   },
   "theme": "dark"
 }

@@ -8,6 +8,18 @@ Node (v23.6+) runs TypeScript directly via type-stripping, so there is no build
 step — just keep the syntax erasable (no `enum`/`namespace`; use plain type
 annotations and `import type`).
 
+## Commands
+
+| Command          | Description                                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------------- |
+| `hello`          | Example command that prints a greeting.                                                      |
+| `optimize-images`| Previews images in the current folder, confirms, then optimizes them in place with `sharp` and reports per-file and total size reduction. Skips any file that would shrink less than 5%. |
+| `png2jpg <file>` | Converts a PNG to a sibling `.jpg`, flattening transparency onto white.                      |
+| `img2webp <file>`| Converts any image to a sibling `.webp`, preserving transparency.                            |
+
+The image commands depend on `sharp`, declared in `bin/package.json` and
+installed automatically by the installer.
+
 ## Add a new command
 
 1. Create `bin/<name>.ts` starting with `#!/usr/bin/env -S node`.

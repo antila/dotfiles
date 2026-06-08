@@ -8,7 +8,7 @@ import sharp from 'sharp';
 type Format = 'jpeg' | 'png' | 'webp' | 'avif' | 'tiff';
 
 const OPTIONS: Record<Format, Record<string, unknown>> = {
-  jpeg: { quality: 80, mozjpeg: true },
+  jpeg: { quality: 90, mozjpeg: true },
   png: { compressionLevel: 9, palette: true },
   webp: { quality: 80 },
   avif: { quality: 55 },
@@ -99,9 +99,11 @@ for (const image of images) {
     const before = image.size;
     const after = output.length;
 
-    if (after >= before) {
+    // Skip the write unless we save at least 5%, so re-running doesn't
+    // degrade already-optimized files (e.g. re-compressing JPEGs).
+    if (before - after < before * 0.05) {
       console.log(
-        `  ${image.name.padEnd(nameWidth)}  ${humanSize(before).padStart(9)}  (already optimal, skipped)`,
+        `  ${image.name.padEnd(nameWidth)}  ${humanSize(before).padStart(9)}  (kept original, <5% gain)`,
       );
       totalBefore += before;
       totalAfter += before;

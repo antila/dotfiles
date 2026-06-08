@@ -16,6 +16,7 @@ annotations and `import type`).
 | `optimize-images`| Previews images in the current folder, confirms, then optimizes them in place with `sharp` and reports per-file and total size reduction. Skips any file that would shrink less than 5%. |
 | `png2jpg <file>` | Converts a PNG to a sibling `.jpg`, flattening transparency onto white.                      |
 | `img2webp <file>`| Converts any image to a sibling `.webp`, preserving transparency.                            |
+| `webp2img <file> [png\|jpg]` | Converts a WebP to a sibling image (`png` by default, keeping transparency; `jpg` flattens onto white). |
 
 The image commands depend on `sharp`, declared in `bin/package.json` and
 installed automatically by the installer.

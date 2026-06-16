@@ -1,4 +1,4 @@
-- `sudo apt-get install stow git`
+- `sudo apt-get install stow git unzip`
 
 # Download and install fnm:
 

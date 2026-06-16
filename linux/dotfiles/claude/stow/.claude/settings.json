@@ -1,42 +1,11 @@
 {
-  "hooks": {
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "atuin hook claude-code",
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      }
-    ],
-    "PostToolUseFailure": [
-      {
-        "hooks": [
-          {
-            "command": "atuin hook claude-code",
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      }
-    ],
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "atuin hook claude-code",
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      }
-    ]
-  },
+  "model": "opus",
   "statusLine": {
-    "command": "bash /home/anders/.claude/statusline-command.sh",
-    "type": "command"
+    "type": "command",
+    "command": "bash /home/anders/.claude/statusline-command.sh"
   },
-  "theme": "dark"
+  "theme": "dark",
+  "enabledPlugins": {
+    "figma@claude-plugins-official": true
+  }
 }

@@ -50,6 +50,7 @@ else
 fi
 
 start_timer "atuin init"
+export PATH="$HOME/.atuin/bin:$PATH"
 eval "$(atuin init zsh)"
 end_timer
 

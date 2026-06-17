@@ -43,6 +43,15 @@ await ensureInstalled('direnv', () => commandExists('direnv'), async () => {
   await $`sudo apt-get install -y direnv`;
 });
 
+await ensureInstalled('tmux', () => commandExists('tmux'), async () => {
+  await $`sudo apt-get install -y tmux`;
+});
+
+
+await ensureInstalled('honeymux', () => commandExists('hmx'), async () => {
+  await $`curl -fsSL https://get.hmx.dev | bash`;
+});
+
 await ensureInstalled('atuin', async () => {
   return !!(await resolveCommand('atuin', [`${process.env.HOME}/.atuin/bin/atuin`]));
 }, async () => {

@@ -95,3 +95,9 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 PATH=$PATH:~/.filen-cli/bin
 
 . "$HOME/.atuin/bin/env"
+
+# On interactive login, if a honeymux/tmux session is already running, attach via hmx.
+# Skip when already inside tmux to avoid nesting.
+if [[ -o interactive && -z "$TMUX" ]] && command -v hmx >/dev/null 2>&1 && tmux list-sessions >/dev/null 2>&1; then
+  hmx
+fi

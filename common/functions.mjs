@@ -182,7 +182,11 @@ export async function install_aptitude_stuff() {
 
     if (!installed) {
       info(`  Installing ${pkg}`);
-      await $`sudo apt-get install -y ${pkg}`;
+      try {
+        await $`sudo apt-get install -y ${pkg}`;
+      } catch {
+        fail(`  ${pkg} not available, skipping`, false);
+      }
     } else {
       success(`- ${pkg} already installed`);
     }

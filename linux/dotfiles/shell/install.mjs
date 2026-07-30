@@ -71,3 +71,16 @@ await ensureInstalled('bat', () => fs.pathExists('/usr/bin/batcat'), async () =>
     await $`ln -s /usr/bin/batcat ${process.env.HOME}/.local/bin/bat`;
   }
 });
+
+// Distros ship a real ~/.bashrc, and install_dotfiles stows with --adopt: left
+// in place, that file gets adopted into the repo and overwrites our loader.
+// Move it aside once so stow can symlink instead.
+const bashrc = `${process.env.HOME}/.bashrc`;
+if (await fs.pathExists(bashrc)) {
+  const stat = await fs.lstat(bashrc);
+  if (!stat.isSymbolicLink()) {
+    const backup = `${bashrc}.pre-split.bak`;
+    info(`    - Backing up existing ~/.bashrc to ${backup}`);
+    await fs.move(bashrc, backup, { overwrite: true });
+  }
+}

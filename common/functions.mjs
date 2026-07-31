@@ -64,11 +64,32 @@ export async function commandExists(command) {
   return !!(await resolveCommand(command));
 }
 
-/** @param {string} dir */
-async function listFilesRecursive(dir) {
-  /** @type {string[]} */
-  const files = [];
+/** @param {string} target */
+async function pointsIntoRepo(target) {
+  const link = await fs.readlink(target).catch(() => null);
+  if (link === null) {
+    return false;
+  }
 
+  const resolved = path.resolve(path.dirname(target), link);
+  return resolved.startsWith(`${ROOT_DIR}${path.sep}`);
+}
+
+/** @param {string} dir */
+async function hasSubdirectory(dir) {
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  return entries.some((entry) => entry.isDirectory());
+}
+
+/**
+ * Set $HOME up so stow folds at the deepest level: a directory that holds
+ * further subdirectories has to exist for real, otherwise stow symlinks it
+ * whole and ~/.config ends up pointing into this repo. Leaf directories are
+ * left missing on purpose so stow links each of them as a single symlink.
+ *
+ * @param {string} stowDir
+ */
+async function prepareTarget(stowDir) {
   /** @param {string} currentDir @param {string} prefix */
   async function walk(currentDir, prefix = '') {
     const entries = await fs.readdir(currentDir, { withFileTypes: true });
@@ -76,58 +97,46 @@ async function listFilesRecursive(dir) {
     for (const entry of entries) {
       const relativePath = path.join(prefix, entry.name);
       const absolutePath = path.join(currentDir, entry.name);
-
-      if (entry.isDirectory()) {
-        await walk(absolutePath, relativePath);
-        continue;
-      }
-
-      if (entry.isFile() || entry.isSymbolicLink()) {
-        files.push(relativePath);
-      }
-    }
-  }
-
-  await walk(dir);
-  return files;
-}
-
-/**
- * Drop directory symlinks that point back into this repo, e.g. a ~/.config
- * that an earlier run folded into dotfiles/shell/stow/.config. Stow recreates
- * them as real directories on the next --no-folding pass.
- *
- * @param {string} stowDir
- */
-async function unfoldDirs(stowDir) {
-  /** @param {string} currentDir @param {string} prefix */
-  async function walk(currentDir, prefix = '') {
-    const entries = await fs.readdir(currentDir, { withFileTypes: true });
-
-    for (const entry of entries) {
-      if (!entry.isDirectory()) {
-        continue;
-      }
-
-      const relativePath = path.join(prefix, entry.name);
       const target = path.join(process.env.HOME, relativePath);
       const stat = await fs.lstat(target).catch(() => null);
+
+      if (entry.isDirectory()) {
+        if (await hasSubdirectory(absolutePath)) {
+          // Shared parent such as ~/.config: keep it a real directory.
+          if (stat?.isSymbolicLink() && (await pointsIntoRepo(target))) {
+            info(`   - Unfolding directory symlink: ${target}`);
+            await fs.remove(target);
+          }
+          await fs.mkdirp(target);
+          await walk(absolutePath, relativePath);
+        } else if (stat && !stat.isSymbolicLink()) {
+          // A real directory blocks folding. Clear out any links we own, and
+          // if that empties it, drop it so stow can fold it into one symlink.
+          // Anything else living there, e.g. ~/.claude, keeps it a real
+          // directory and stow links the individual files instead.
+          await walk(absolutePath, relativePath);
+
+          if ((await fs.readdir(target)).length === 0) {
+            info(`   - Folding directory: ${target}`);
+            await fs.remove(target);
+          }
+        }
+
+        continue;
+      }
 
       if (!stat) {
         continue;
       }
 
       if (stat.isSymbolicLink()) {
-        const link = await fs.readlink(target);
-        const resolved = path.resolve(path.dirname(target), link);
-        if (resolved.startsWith(`${ROOT_DIR}${path.sep}`)) {
-          info(`   - Unfolding directory symlink: ${target}`);
-          await fs.remove(target);
-        }
-        continue;
+        await fs.remove(target);
+      } else {
+        // Move it aside rather than --adopt it: adopting would overwrite the
+        // tracked copy in this repo with whatever happens to be in $HOME.
+        info(`   - Backing up existing file: ${target} -> ${target}.bak`);
+        await fs.move(target, `${target}.bak`, { overwrite: true });
       }
-
-      await walk(path.join(currentDir, entry.name), relativePath);
     }
   }
 
@@ -149,31 +158,10 @@ export async function install_dotfiles() {
     const stowDir = path.join(src);
     info(` - Checking: ${stowDir}`);
 
-    await unfoldDirs(stowDir);
+    await prepareTarget(stowDir);
 
-    const files = await listFilesRecursive(stowDir);
-
-    for (const file of files) {
-      const target = path.join(process.env.HOME, file);
-      const stat = await fs.lstat(target).catch(() => null);
-
-      if (!stat) {
-        info(`   - Creating new symlink: ${target}`);
-      } else if (stat.isSymbolicLink()) {
-        info(`   - Updating existing symlink: ${target}`);
-        await fs.remove(target);
-      } else {
-        // Move it aside rather than --adopt it: adopting would overwrite the
-        // tracked copy in this repo with whatever happens to be in $HOME.
-        info(`   - Backing up existing file: ${target} -> ${target}.bak`);
-        await fs.move(target, `${target}.bak`, { overwrite: true });
-      }
-    }
-
-    // --no-folding keeps shared directories such as ~/.config real, so stow
-    // links the individual files instead of the whole tree.
     try {
-      await $`stow --no-folding --restow --dir=${path.join(src, '..')} --target=${process.env.HOME} stow`;
+      await $`stow --restow --dir=${path.join(src, '..')} --target=${process.env.HOME} stow`;
     } catch {
       fail(`   - Conflicts while stowing ${stowDir}, skipping`, false);
     }

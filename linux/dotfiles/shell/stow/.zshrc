@@ -3,7 +3,7 @@
 # This file is only a loader. Real config lives in ~/.config/zsh/rc.d/*.zsh,
 # one fragment per concern, sourced in filename order. The numeric prefix is
 # the ordering contract -- a few fragments genuinely care where they land
-# (see 70-sdkman, 75-yarn, 99-honeymux).
+# (see 70-sdkman, 75-yarn, 99-tmux).
 #
 # Every fragment is timed; 95-timing-report prints the breakdown when startup
 # crosses 200ms.

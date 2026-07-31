@@ -4,8 +4,9 @@
     "type": "command",
     "command": "bash /home/anders/.claude/statusline-command.sh"
   },
-  "theme": "dark",
   "enabledPlugins": {
     "figma@claude-plugins-official": true
-  }
+  },
+  "theme": "dark",
+  "tui": "default"
 }

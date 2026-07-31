@@ -2,11 +2,56 @@
   "model": "opus",
   "statusLine": {
     "type": "command",
-    "command": "bash /home/anders/.claude/statusline-command.sh"
+    "command": "bash \"$HOME/.claude/statusline-command.sh\""
   },
   "enabledPlugins": {
     "figma@claude-plugins-official": true
   },
   "theme": "dark",
-  "tui": "default"
+  "tui": "default",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "python3 /home/anders/.claude/hooks/honeymux.py",
+            "type": "command",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "command": "python3 /home/anders/.claude/hooks/honeymux.py",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "python3 /home/anders/.claude/hooks/honeymux.py",
+            "type": "command",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "command": "python3 /home/anders/.claude/hooks/honeymux.py",
+            "type": "command",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
 }

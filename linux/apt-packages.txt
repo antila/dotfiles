@@ -9,7 +9,6 @@ vim
 git-gui
 curl
 htop
-tmux
 
 # A command-line fuzzy finder
 fzf

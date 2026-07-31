@@ -162,11 +162,11 @@ function parsePackageList(content) {
 export async function install_aptitude_stuff() {
   info('Installing apt stuff:');
 
-  if (!(await fs.pathExists('.auto-install-apt'))) {
+  if (!(await fs.pathExists('apt-packages.txt'))) {
     return;
   }
 
-  const content = await fs.readFile('.auto-install-apt', 'utf8');
+  const content = await fs.readFile('apt-packages.txt', 'utf8');
   /** @type {string[]} */
   const packages = parsePackageList(content);
   const dpkgStatusFormat = '$' + '{Status}';
@@ -210,11 +210,11 @@ export async function install_homebrew_stuff() {
 
   info('Installing homebrew stuff:');
 
-  if (!(await fs.pathExists('.auto-install-brew'))) {
+  if (!(await fs.pathExists('brew-packages.txt'))) {
     return;
   }
 
-  const content = await fs.readFile('.auto-install-brew', 'utf8');
+  const content = await fs.readFile('brew-packages.txt', 'utf8');
   /** @type {string[]} */
   const packages = parsePackageList(content);
 

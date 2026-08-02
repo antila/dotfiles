@@ -16,6 +16,18 @@ async function ensureInstalled(name, checkFn, installFn) {
   }
 }
 
+// rc.d/10-locale.zsh exports LC_ALL, so every command warns "Cannot set
+// LC_CTYPE to default locale" until the locale is actually generated.
+await ensureInstalled('en_US.UTF-8 locale', async () => {
+  const { stdout } = await $`locale -a`.nothrow().quiet();
+  return stdout.split('\n').some((l) => /^en_US\.(utf8|UTF-8)$/.test(l.trim()));
+}, async () => {
+  await $`sudo apt-get install -y locales`;
+  await $`sudo sed -i 's/^# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen`;
+  await $`sudo locale-gen`;
+  await $`sudo update-locale LANG=en_US.UTF-8 LANGUAGE=en_US:en`;
+});
+
 await ensureInstalled('zsh', () => commandExists('zsh'), async () => {
   await $`sudo apt-get install -y zsh`;
   const zshPath = await resolveCommand('zsh');

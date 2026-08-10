@@ -18,6 +18,8 @@ if [[ -o interactive && -z "$TMUX" && -t 0 ]] \
     print -r -- "tmux is running with $#_tmux_panes open $_tmux_pane_word in $#_tmux_sessions $_tmux_session_word -- attach with \`tmux attach\`"
 
     unset _tmux_pane_word _tmux_session_word
+  else
+    print -r -- "No tmux session running -- start one with \`tmux\`"
   fi
 
   unset _tmux_panes _tmux_sessions

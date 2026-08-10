@@ -1,0 +1,8 @@
+# Only installed on machines with a GUI. Set DOTFILES_GUI=1 to force these on
+# (e.g. over SSH before X is installed), or DOTFILES_GUI=0 to force them off.
+
+# nice terminal
+ghostty
+
+# git's built-in GUI
+git-gui

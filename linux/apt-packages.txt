@@ -6,12 +6,8 @@ lolcat
 
 # tools/work
 vim
-git-gui
 curl
 htop
 
 # A command-line fuzzy finder
 fzf
-
-# nice terminal
-ghostty

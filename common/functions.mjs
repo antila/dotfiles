@@ -64,6 +64,29 @@ export async function commandExists(command) {
   return !!(await resolveCommand(command));
 }
 
+/**
+ * Whether this machine is worth installing GUI packages on. A running session
+ * is the strongest signal, but installs also happen over SSH where DISPLAY is
+ * unset, so fall back to "is a display server even installed here". Set
+ * DOTFILES_GUI=1 / =0 to override when that guess is wrong.
+ */
+export async function hasGui() {
+  const override = process.env.DOTFILES_GUI;
+  if (override) {
+    return override !== '0' && override !== 'false';
+  }
+
+  if (process.platform === 'darwin') {
+    return true;
+  }
+
+  if (process.env.DISPLAY || process.env.WAYLAND_DISPLAY) {
+    return true;
+  }
+
+  return (await commandExists('Xorg')) || (await commandExists('Xwayland'));
+}
+
 /** @param {string} target */
 async function pointsIntoRepo(target) {
   const link = await fs.readlink(target).catch(() => null);
@@ -195,12 +218,22 @@ function parsePackageList(content) {
 
 export async function install_aptitude_stuff() {
   info('Installing apt stuff:');
+  await install_apt_file('apt-packages.txt');
 
-  if (!(await fs.pathExists('apt-packages.txt'))) {
+  if (await hasGui()) {
+    await install_apt_file('apt-packages-gui.txt');
+  } else {
+    info('  No GUI here, skipping GUI packages');
+  }
+}
+
+/** @param {string} file */
+async function install_apt_file(file) {
+  if (!(await fs.pathExists(file))) {
     return;
   }
 
-  const content = await fs.readFile('apt-packages.txt', 'utf8');
+  const content = await fs.readFile(file, 'utf8');
   /** @type {string[]} */
   const packages = parsePackageList(content);
   const dpkgStatusFormat = '$' + '{Status}';

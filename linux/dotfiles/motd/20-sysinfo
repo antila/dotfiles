@@ -1,0 +1,261 @@
+#!/bin/bash
+#
+# Login stats, drawn as htop meters. Installed to /etc/update-motd.d/ by
+# ../motd/install.mjs -- pam_motd re-runs that directory on every login, so
+# these numbers are live rather than frozen at boot.
+#
+# Runs as root at login, before the shell exists. Keep it dependency-free
+# (/proc + df + coreutils only) and keep it quick: everything here is latency
+# the login prompt has to wait for.
+
+set -u
+
+# Width of the meter interior, i.e. everything between the brackets. The value
+# text is right-aligned inside this, exactly like htop: the bar fills from the
+# left and the text is painted over its right-hand end.
+readonly METER_WIDTH=30
+
+# CPU percentages are a delta between two /proc/stat samples, so this is a
+# mandatory sleep on every login. The kernel counts in 10ms jiffies, so the
+# window also sets the resolution: 0.25s gives ~25 ticks per core, i.e. steps
+# of about 4%. Shorter feels snappier but quantises the per-core bars into
+# uselessness; much longer is a delay you notice at the login prompt.
+readonly SAMPLE_SECONDS=0.25
+
+# Per-core meters are htop's signature, but one line per core stops being a
+# banner somewhere past a handful of cores. Up to 4 cores go in one column, up
+# to this limit in two, and anything wider collapses to a single aggregate.
+readonly MAX_CORE_METERS=16
+
+# Colour is on unless refused. Testing for a tty would be wrong here: pam_motd
+# runs this with stdout redirected into /run/motd.dynamic and replays the file
+# to the terminal at login, so the only stdout this ever sees is a file.
+if [[ -z ${NO_COLOR:-} ]]; then
+  readonly C_RESET=$'\033[0m' C_DIM=$'\033[2m' C_BOLD=$'\033[1m'
+  readonly C_GREEN=$'\033[32m' C_RED=$'\033[31m' C_BLUE=$'\033[34m'
+  readonly C_YELLOW=$'\033[33m' C_CYAN=$'\033[36m' C_MAGENTA=$'\033[35m'
+else
+  readonly C_RESET='' C_DIM='' C_BOLD=''
+  readonly C_GREEN='' C_RED='' C_BLUE=''
+  readonly C_YELLOW='' C_CYAN='' C_MAGENTA=''
+fi
+
+# ---------------------------------------------------------------------------
+# Formatting helpers
+# ---------------------------------------------------------------------------
+
+# Bytes -> htop's compact units (K/M/G/T), 3 significant-ish digits.
+human() {
+  local kb=$1
+  if (( kb < 1024 )); then
+    printf '%dK' "$kb"
+  elif (( kb < 1024 * 1024 )); then
+    printf '%d.%02dM' $(( kb / 1024 )) $(( (kb % 1024) * 100 / 1024 ))
+  elif (( kb < 1024 * 1024 * 1024 )); then
+    printf '%d.%02dG' $(( kb / 1048576 )) $(( (kb % 1048576) * 100 / 1048576 ))
+  else
+    printf '%d.%02dT' $(( kb / 1073741824 )) $(( (kb % 1073741824) * 100 / 1073741824 ))
+  fi
+}
+
+# num/den as a percentage with one decimal. Bash has no floats, so work in
+# tenths of a percent and split the result.
+pct1() {
+  local num=$1 den=$2 tenths
+  (( den == 0 )) && { printf '0.0'; return; }
+  tenths=$(( num * 1000 / den ))
+  printf '%d.%d' $(( tenths / 10 )) $(( tenths % 10 ))
+}
+
+# ---------------------------------------------------------------------------
+# Meter rendering
+# ---------------------------------------------------------------------------
+
+# render_meter <label> <text> <segment>...
+#
+# Each segment is "cells:color". Segments are laid down left to right, then the
+# value text is painted over the right-hand end of the bar. Painting the text
+# last is what makes it readable even when the bar runs underneath it -- htop
+# does the same thing.
+render_meter() {
+  local label=$1 text=$2
+  shift 2
+
+  local -a cell_char cell_color
+  local i
+  for (( i = 0; i < METER_WIDTH; i++ )); do
+    cell_char[i]=' '
+    cell_color[i]=''
+  done
+
+  # Lay down the bar segments.
+  local pos=0 segment cells color
+  for segment in "$@"; do
+    cells=${segment%%:*}
+    color=${segment#*:}
+    for (( i = 0; i < cells && pos < METER_WIDTH; i++, pos++ )); do
+      cell_char[pos]='|'
+      cell_color[pos]=$color
+    done
+  done
+
+  # Paint the value text over the right-hand end.
+  local text_len=${#text}
+  (( text_len > METER_WIDTH )) && text_len=$METER_WIDTH
+  local start=$(( METER_WIDTH - text_len ))
+  for (( i = 0; i < text_len; i++ )); do
+    cell_char[start + i]=${text:i:1}
+    cell_color[start + i]=$C_BOLD
+  done
+
+  # Emit, collapsing runs of identical colour into one escape sequence.
+  local out='' current='' want
+  for (( i = 0; i < METER_WIDTH; i++ )); do
+    want=${cell_color[i]}
+    if [[ $want != "$current" ]]; then
+      out+="${C_RESET}${want}"
+      current=$want
+    fi
+    out+=${cell_char[i]}
+  done
+
+  printf '%s%7s%s%s[%s%s%s]%s\n' \
+    "$C_CYAN" "$label" "$C_RESET" "$C_DIM" "$C_RESET" "$out" "${C_RESET}${C_DIM}" "$C_RESET"
+}
+
+# ---------------------------------------------------------------------------
+# CPU
+# ---------------------------------------------------------------------------
+
+# Snapshot every cpu line in /proc/stat into the named array.
+read_cpu_sample() {
+  local -n dest=$1
+  local line
+  dest=()
+  while read -r line; do
+    [[ $line == cpu* ]] || continue
+    dest+=("$line")
+  done < /proc/stat
+}
+
+read_cpu_sample cpu_before
+sleep "$SAMPLE_SECONDS"
+read_cpu_sample cpu_after
+
+# cpu_meter <index> <label> -- diffs sample <index> and renders one meter.
+cpu_meter() {
+  local index=$1 label=$2
+  local -a before=(${cpu_before[index]}) after=(${cpu_after[index]})
+
+  # Fields after the name: user nice system idle iowait irq softirq steal
+  local d_user=$(( after[1] - before[1] ))
+  local d_nice=$(( after[2] - before[2] ))
+  local d_system=$(( after[3] - before[3] ))
+  local d_idle=$(( after[4] - before[4] ))
+  local d_iowait=$(( after[5] - before[5] ))
+  local d_irq=$(( after[6] - before[6] ))
+  local d_soft=$(( after[7] - before[7] ))
+  local d_steal=$(( after[8] - before[8] ))
+
+  local total=$(( d_user + d_nice + d_system + d_idle + d_iowait + d_irq + d_soft + d_steal ))
+  (( total <= 0 )) && total=1
+
+  # htop's kernel bucket: system time plus the interrupt/steal odds and ends.
+  local kernel=$(( d_system + d_irq + d_soft + d_steal ))
+  local busy=$(( d_user + d_nice + kernel ))
+
+  local w_nice=$(( d_nice * METER_WIDTH / total ))
+  local w_user=$(( d_user * METER_WIDTH / total ))
+  local w_kernel=$(( kernel * METER_WIDTH / total ))
+
+  render_meter "$label" "$(pct1 "$busy" "$total")%" \
+    "$w_nice:$C_BLUE" "$w_user:$C_GREEN" "$w_kernel:$C_RED"
+}
+
+# ---------------------------------------------------------------------------
+# Memory and swap
+# ---------------------------------------------------------------------------
+
+declare -A mem
+while read -r key value _; do
+  mem[${key%:}]=$value
+done < /proc/meminfo
+
+mem_total=${mem[MemTotal]:-0}
+mem_free=${mem[MemFree]:-0}
+mem_buffers=${mem[Buffers]:-0}
+mem_shmem=${mem[Shmem]:-0}
+# htop counts reclaimable slab as cache, and shared memory as used rather than
+# cached, so it lands in the "used" bucket below.
+mem_cached=$(( ${mem[Cached]:-0} + ${mem[SReclaimable]:-0} - mem_shmem ))
+(( mem_cached < 0 )) && mem_cached=0
+mem_used=$(( mem_total - mem_free - mem_buffers - mem_cached - mem_shmem ))
+(( mem_used < 0 )) && mem_used=0
+
+swap_total=${mem[SwapTotal]:-0}
+swap_used=$(( swap_total - ${mem[SwapFree]:-0} ))
+
+# ---------------------------------------------------------------------------
+# Output
+# ---------------------------------------------------------------------------
+
+printf '\n %s%s%s  %s%s  %s  %s%s\n\n' \
+  "$C_BOLD" "$(hostname -s 2>/dev/null || cat /proc/sys/kernel/hostname)" "$C_RESET" \
+  "$C_DIM" "$(uname -sr)" \
+  "$(uptime -p 2>/dev/null || true)" \
+  "load$(cut -d' ' -f1-3 /proc/loadavg | sed 's/ /, /g; s/^/ /')" \
+  "$C_RESET"
+
+core_count=$(( ${#cpu_after[@]} - 1 ))
+if (( core_count >= 1 && core_count <= MAX_CORE_METERS )); then
+  columns=2
+  (( core_count <= 4 )) && columns=1
+  rows=$(( (core_count + columns - 1) / columns ))
+
+  for (( row = 0; row < rows; row++ )); do
+    line=''
+    for (( col = 0; col < columns; col++ )); do
+      core=$(( col * rows + row ))
+      (( core >= core_count )) && continue
+      # Index 0 is the aggregate "cpu" line, so core N lives at N+1.
+      line+="$(cpu_meter $(( core + 1 )) "$(( core + 1 ))")  "
+    done
+    printf '%s\n' "${line%  }"
+  done
+else
+  cpu_meter 0 'CPU'
+fi
+
+render_meter 'Mem' "$(human $mem_used)/$(human $mem_total)" \
+  "$(( mem_used * METER_WIDTH / (mem_total > 0 ? mem_total : 1) )):$C_GREEN" \
+  "$(( mem_buffers * METER_WIDTH / (mem_total > 0 ? mem_total : 1) )):$C_BLUE" \
+  "$(( mem_shmem * METER_WIDTH / (mem_total > 0 ? mem_total : 1) )):$C_MAGENTA" \
+  "$(( mem_cached * METER_WIDTH / (mem_total > 0 ? mem_total : 1) )):$C_YELLOW"
+
+if (( swap_total > 0 )); then
+  render_meter 'Swp' "$(human $swap_used)/$(human $swap_total)" \
+    "$(( swap_used * METER_WIDTH / swap_total )):$C_RED"
+fi
+
+printf '\n'
+
+# Real filesystems only: the pseudo ones carry no capacity worth a meter.
+while read -r _ blocks used _ _ mount; do
+  [[ $blocks =~ ^[0-9]+$ ]] || continue
+  (( blocks == 0 )) && continue
+
+  # Colour by how close to full it is, so a tight disk is visible at a glance.
+  fill_pct=$(( used * 100 / blocks ))
+  color=$C_GREEN
+  (( fill_pct >= 75 )) && color=$C_YELLOW
+  (( fill_pct >= 90 )) && color=$C_RED
+
+  # Basename keeps the label inside the column; root has no basename to take.
+  label=${mount##*/}
+  [[ -z $label ]] && label='/'
+
+  render_meter "$label" "$(human "$used")/$(human "$blocks")" \
+    "$(( used * METER_WIDTH / blocks )):$color"
+done < <(df -P -l -x tmpfs -x devtmpfs -x squashfs -x overlay -x efivarfs 2>/dev/null | tail -n +2)
+
+printf '\n'
